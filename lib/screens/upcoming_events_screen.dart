@@ -66,18 +66,31 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
 
     Widget body = new Container(
       width: width,
-      child: new ListView(
-        children: <Widget>[
-          FeaturedEventCard(
-            imgUrl: firebaseStorageUrl + "featured.jpg?alt=media&token=6ce13e92-bb8c-46a0-b0d4-11f79f889612",
-            title: "True Flavours",
-            description: "Mexican Gastronomy",
-            datetime: "16 July 2019 • 7:00pm",
-            address: "Arbora - Mount Faber",
-          ),
-          _upcomingEvents,
-        ],
-      ),
+      child: _eventList != null ? new ListView.builder(
+        itemCount: _eventList.length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return FeaturedEventCard(
+              imgUrl: firebaseStorageUrl + "featured.jpg?alt=media&token=6ce13e92-bb8c-46a0-b0d4-11f79f889612",
+              title: "True Flavours",
+              description: "Mexican Gastronomy",
+              datetime: "16 July 2019 • 7:00pm",
+              address: "Arbora - Mount Faber",
+            );
+          } else {
+            return EventCard(
+              imgUrl      : _eventList[index - 1].getImgUrl(),
+              title       : _eventList[index - 1].getName(),
+              description : _eventList[index - 1].getDescription(),
+              datetime    : _eventList[index - 1].getDatetimeStart(),
+              address     : _eventList[index - 1].getAddress(),
+              category    : _eventList[index - 1].getCategory(),
+            );
+          }
+        },
+      ) : new Center(
+        child: new CircularProgressIndicator(),
+      )
     );
 
     return new Scaffold(
