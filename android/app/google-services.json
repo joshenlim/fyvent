@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "660344238495",
+    "firebase_url": "https://fyvent-27d5a.firebaseio.com",
+    "project_id": "fyvent-27d5a",
+    "storage_bucket": "fyvent-27d5a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660344238495:android:e3df88f2144025f8",
+        "android_client_info": {
+          "package_name": "com.example.fyvent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660344238495-jfvc8plf55rl3utvglo8clafvvnguqrh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fyvent",
+            "certificate_hash": "bbcfad4b4284f29abd1a97cac5ec530e83f31f94"
+          }
+        },
+        {
+          "client_id": "660344238495-toac375o62k46otdcu9i8eklutm1rfli.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSBtupIYqXd3YScqr3tA6G8WmyCGqut74"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660344238495-toac375o62k46otdcu9i8eklutm1rfli.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "660344238495-llrsf2i1u9oim0diend1s7ap7u3247s6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fyvent"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
