@@ -123,7 +123,7 @@ class LoginScreenState extends State<LoginScreen>
     var width = MediaQuery.of(context).size.width;
     appState = container.state;
 
-    if (appState.user != null) print("login screen: " + appState.user.getName());
+    // if (appState.user != null) print("login screen: " + appState.user.getName());
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
