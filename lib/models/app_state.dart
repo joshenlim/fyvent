@@ -14,7 +14,7 @@ class AppState {
   // Constructor
   AppState({
     this.isLoading = false,
-    this.user
+    this.user,
   });
 
   // A constructor for when the app is loading.

@@ -1,41 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:fyvent/models/event.dart';
+import 'package:fyvent/screens/event_detail_screen.dart';
 
 class EventCard extends StatelessWidget {
-  final String imgUrl;
-  final String title;
-  final String description;
-  final String datetime;
-  final String address;
-  final String category;
-
-  EventCard({this.imgUrl, this.title, this.description, this.datetime, this.address, this.category});
+  final Event event;
+  EventCard({this.event});
 
   @override
   Widget build(BuildContext context) {
+    String imgUrl     = event.getImgUrl();
+    String title      = event.getName();
+    String category   = event.getCategory();
+
     var width = MediaQuery.of(context).size.width;
     final cardDescStyle = new TextStyle(color: Colors.white, fontFamily: 'Roboto', fontWeight: FontWeight.w300, fontSize: 14.0);
     final boxShadowOverlayHeight = title.length > 27 ? 96.0 : 80.0;
+
+    if (title.length > 47) title = title.substring(0, 47) + "...";
+
+    // Possibly move this into a screen manager, but must have context
+    void _showEventDetail() {
+      Navigator.of(context).push(MaterialPageRoute<void>(
+        builder: (BuildContext context) => EventDetailScreen(event: event)
+      ));
+    }
 
     return new Container(
       height: 200,
       width: width,
       margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
-        image: new DecorationImage(
-          image: new NetworkImage(imgUrl),
-          fit: BoxFit.cover,
-          alignment: Alignment.center,
-        )
-      ),
       child: new Stack(
         children: [
+          new Container(
+            height: 200,
+            child: Hero(
+              tag: imgUrl,
+              child: ClipRRect(
+                borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
+                child: new Image.network(
+                  imgUrl,
+                  fit:BoxFit.cover,
+                ),
+              ),
+            )
+          ),
           new Align(
             alignment: Alignment.bottomCenter,
             child: new Container(
               padding: const EdgeInsets.all(15.0),
-              color: Colors.black.withAlpha(100),
               height: boxShadowOverlayHeight,
+              decoration: new BoxDecoration(
+                borderRadius: new BorderRadius.only(
+                  bottomLeft: const Radius.circular(5.0),
+                  bottomRight: const Radius.circular(5.0),
+                ),
+                color: Colors.black.withAlpha(100),
+              ),
               child: new Row(
                 children: [
                   new Expanded(
@@ -56,7 +76,7 @@ class EventCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         new RawMaterialButton(
-                          onPressed: () {},
+                          onPressed: () => _showEventDetail(),
                           child: new Icon(
                             Icons.arrow_forward_ios,
                             color: Colors.cyan,

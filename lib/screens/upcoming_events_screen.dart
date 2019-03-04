@@ -19,7 +19,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
   @override
   void initState() {
     super.initState();
-    getEvents().then((res) {
+    getEvents(10).then((res) {
       setState(() {
         _eventList = res;
       });
@@ -30,25 +30,6 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
     var width = MediaQuery.of(context).size.width;
     final container = AppStateContainer.of(context);
     final firebaseStorageUrl = 'https://firebasestorage.googleapis.com/v0/b/fyvent-27d5a.appspot.com/o/';
-    
-    Widget _upcomingEvents;
-
-    if (_eventList == null) {
-      _upcomingEvents = new Text("Loading...");
-    } else {
-      _upcomingEvents = new Column(
-        children: _eventList.map((event) {
-          return EventCard(
-              imgUrl      : event.getImgUrl(),
-              title       : event.getName(),
-              description : event.getDescription(),
-              datetime    : event.getDatetimeStart(),
-              address     : event.getAddress(),
-              category    : event.getCategory(),
-          );
-        }).toList()
-      );
-    }
 
     Widget _appBar = new AppBar(
       title: new Image.asset('assets/images/logo-color.png', width: 20.0),
@@ -67,8 +48,14 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
     Widget body = new Container(
       width: width,
       child: _eventList != null ? new ListView.builder(
-        itemCount: _eventList.length + 1,
         itemBuilder: (context, index) {
+          if (index >= _eventList.length - 3) {
+            getEvents(5).then((res) {
+              _eventList.addAll(res);
+            });
+            // Next up: How to load events which are not already shown on the screen
+            // Have to look into the api
+          }
           if (index == 0) {
             return FeaturedEventCard(
               imgUrl: firebaseStorageUrl + "featured.jpg?alt=media&token=6ce13e92-bb8c-46a0-b0d4-11f79f889612",
@@ -77,15 +64,16 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
               datetime: "16 July 2019 • 7:00pm",
               address: "Arbora - Mount Faber",
             );
-          } else {
-            return EventCard(
-              imgUrl      : _eventList[index - 1].getImgUrl(),
-              title       : _eventList[index - 1].getName(),
-              description : _eventList[index - 1].getDescription(),
-              datetime    : _eventList[index - 1].getDatetimeStart(),
-              address     : _eventList[index - 1].getAddress(),
-              category    : _eventList[index - 1].getCategory(),
+          } else if (index == 1) {
+            return new Container(
+              margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+              child: new Text(
+                "Upcoming Events:",
+                style: new TextStyle(fontFamily: 'Greycliff', fontSize: 18.0),
+              ),
             );
+          } else {
+            return EventCard(event: _eventList[index - 2]);
           }
         },
       ) : new Center(

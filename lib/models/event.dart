@@ -7,6 +7,7 @@ class Event {
   String address;
   String datetimeStart;
   String datetimeEnd;
+  String datetimeRange;
   String category;
   String imgUrl;
 
@@ -17,6 +18,7 @@ class Event {
     this.address,
     this.datetimeStart,
     this.datetimeEnd,
+    this.datetimeRange,
     this.category,
     this.imgUrl,
   });
@@ -53,6 +55,10 @@ class Event {
     return this.datetimeEnd;
   }
 
+  String getDatetimeRange() {
+    return this.datetimeRange;
+  }
+
   factory Event.fromJson(Map<String, dynamic> parsedJson){
 
     String parsedImgUrl = parsedJson['images']['images'][0]['transforms']['transforms']
@@ -65,6 +71,7 @@ class Event {
       address       : parsedJson['address'],
       datetimeStart : parseDateTime(parsedJson['datetime_start']),
       datetimeEnd   : parseDateTime(parsedJson['datetime_end']),
+      datetimeRange : parseDatetimeRange(parsedJson['datetime_start'], parsedJson['datetime_end']),
       category      : parsedJson['category']['name'],
       imgUrl        : 'http://' + parsedImgUrl,
     );
