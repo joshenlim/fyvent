@@ -20,8 +20,7 @@ class FeaturedEventCard extends StatelessWidget {
         image: new DecorationImage(
           image: new NetworkImage(imgUrl),
           fit: BoxFit.cover,
-          alignment: Alignment.centerLeft,
-          colorFilter: new ColorFilter.mode(Colors.black.withAlpha(100), BlendMode.darken),
+          alignment: Alignment.center,
         )
       ),
       child: new Column(
@@ -56,6 +55,7 @@ class FeaturedEventCard extends StatelessWidget {
               fontWeight: FontWeight.w300, 
             )
           ),
+          new Padding(padding: const EdgeInsets.only(top: 3.0)),
           new Text(
             address,
             style: new TextStyle(

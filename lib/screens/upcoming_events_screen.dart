@@ -62,11 +62,11 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
           }
           if (index == 0) {
             return FeaturedEventCard(
-              imgUrl: firebaseStorageUrl + "featured.jpg?alt=media&token=6ce13e92-bb8c-46a0-b0d4-11f79f889612",
-              title: "True Flavours",
-              description: "Mexican Gastronomy",
-              datetime: "16 July 2019 • 7:00pm",
-              address: "Arbora - Mount Faber",
+              imgUrl: firebaseStorageUrl + "featured.jpg?alt=media&token=e68a1975-50ca-42c3-b38a-6ac587b8fbd0",
+              title: "Tis The Sea-sun",
+              description: "Beach Getaway Expo",
+              datetime: "16 July 2019 • 10:00 AM",
+              address: "Suntec City - Event Hall 3",
             );
           } else if (index == 1) {
             return new Container(
