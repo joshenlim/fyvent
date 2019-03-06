@@ -48,7 +48,8 @@ class EventCard extends StatelessWidget {
                 borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
                 child: new Image.network(
                   imgUrl,
-                  fit:BoxFit.cover,
+                  fit: BoxFit.cover,
+                  alignment: Alignment.center,
                 ),
               ),
             )

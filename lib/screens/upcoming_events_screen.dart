@@ -14,7 +14,7 @@ class UpcomingEventsScreen extends StatefulWidget {
 }
 
 class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
-  List<Event> _eventList;
+  List<Event> _eventList = List<Event>();
 
   @override
   void initState() {
@@ -51,7 +51,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
 
     Widget body = new Container(
       width: width,
-      child: _eventList != null ? new ListView.builder(
+      child: _eventList.length != 0 ? new ListView.builder(
         itemBuilder: (context, index) {
           if (index >= _eventList.length - 3) {
             getEvents(5).then((res) {

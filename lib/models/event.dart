@@ -85,8 +85,7 @@ class Event {
 
   factory Event.fromJson(Map<String, dynamic> parsedJson){
 
-    String parsedImgUrl = parsedJson['images']['images'][0]['transforms']['transforms']
-      .where((eventImg) => eventImg['transformation_id'] == 7).toList()[0]['url'].substring(2);
+    String parsedImgUrl = parsedJson['images']['images'][0]['transforms']['transforms'].last['url'].substring(2);
     String parsedWebUrl = parsedJson['web_sites']['web_sites'].length > 0 ? parsedJson['web_sites']['web_sites'][0]['url'] : null;
 
     return Event(
