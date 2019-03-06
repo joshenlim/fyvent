@@ -28,10 +28,23 @@ class EventDetailScreenState extends State<EventDetailScreen> {
 
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    final _cardPadding = const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 15.0, top: 15.0);
+    final _cardPadding = const EdgeInsets.all(20.0);
     final _cardMargin = const EdgeInsets.only(top:20.0, left: 20.0, right: 20.0);
+    final _lastCardMargin = const EdgeInsets.all(20.0);
     final String imgUrl = event.getImgUrl();
     final String webUrl = event.getWebUrl();
+
+    final _cardDecoration = new BoxDecoration(
+      borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
+      color: Colors.white,
+      boxShadow: [
+        new BoxShadow(
+          color: Colors.black12,
+          blurRadius: 5.0,
+          offset:Offset(0, 2)
+        ),
+      ]
+    );
 
     final MarkerId markerId = MarkerId("marker_1");
     Map<MarkerId, Marker> markers = <MarkerId, Marker>{
@@ -85,10 +98,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
       padding: _cardPadding,
       margin: _cardMargin,
       width: width,
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
-        color: Colors.white,
-      ),
+      decoration: _cardDecoration,
       child: new Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,6 +145,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
                     ),
                   ]
                 ) : new Padding(padding: const EdgeInsets.all(0)),
+                new Padding(padding: const EdgeInsets.only(top: 5.0)),
                 new Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -182,10 +193,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
       padding: _cardPadding,
       margin: _cardMargin,
       width: width,
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
-        color: Colors.white,
-      ),
+      decoration: _cardDecoration,
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,10 +209,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
       padding: _cardPadding,
       margin: _cardMargin,
       width: width,
-      decoration: new BoxDecoration(
-        borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
-        color: Colors.white,
-      ),
+      decoration: _cardDecoration,
       child: new Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,6 +235,88 @@ class EventDetailScreenState extends State<EventDetailScreen> {
       )
     );
 
+    Widget _eventActionsCard = new Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
+      margin: _lastCardMargin,
+      width: width,
+      decoration: _cardDecoration,
+      child: new Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          new Expanded(
+            flex: 3,
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                new Container(
+                  decoration: new BoxDecoration(
+                    border: new Border.all(
+                      color: Colors.black26,
+                    ),
+                    borderRadius: BorderRadius.circular(100.0),
+                  ),
+                  child: new IconButton(
+                    icon: new Icon(Icons.local_parking, size: 28.0),
+                    onPressed: () {print("yo");},
+                  ),
+                ),
+                new Padding(padding: const EdgeInsets.only(top: 10.0)),
+                new Text("View Nearby Carparks", textAlign: TextAlign.center),
+              ]
+            ),
+          ),
+          new Expanded(
+            flex: 3,
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                new Container(
+                  decoration: new BoxDecoration(
+                    border: new Border.all(
+                      color: Colors.black26,
+                    ),
+                    borderRadius: BorderRadius.circular(100.0),
+                  ),
+                  child: new IconButton(
+                    icon: new Icon(Icons.local_atm, size: 28.0),
+                    onPressed: () {print("yo");},
+                  ),
+                ),
+                new Padding(padding: const EdgeInsets.only(top: 10.0)),
+                new Text("View Nearby ATMs", textAlign: TextAlign.center),
+              ]
+            ),
+          ),
+          new Expanded(
+            flex: 3,
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                new Container(
+                  decoration: new BoxDecoration(
+                    border: new Border.all(
+                      color: Colors.black26,
+                    ),
+                    borderRadius: BorderRadius.circular(100.0),
+                  ),
+                  child: new IconButton(
+                    icon: new Icon(Icons.directions_car, size: 28.0),
+                    onPressed: () {print("yo");},
+                  ),
+                ),
+                new Padding(padding: const EdgeInsets.only(top: 10.0)),
+                new Text("View Navigation to Event", textAlign: TextAlign.center),
+              ]
+            ),
+          ),
+        ]
+      )
+    );
+
     return Scaffold(
       appBar: _appBar,
       key: _scaffoldKey,
@@ -243,6 +330,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
             _eventDetailsCard,
             _eventLocationCard,
             _eventDescriptionCard,
+            _eventActionsCard,
           ]
         ),
       ),
