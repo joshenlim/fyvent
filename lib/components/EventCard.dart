@@ -33,6 +33,15 @@ class EventCard extends StatelessWidget {
         children: [
           new Container(
             height: 200,
+            decoration: new BoxDecoration(
+              boxShadow: [
+                new BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 5.0,
+                  offset:Offset(0, 2)
+                ),
+              ]
+            ),
             child: Hero(
               tag: imgUrl,
               child: ClipRRect(
