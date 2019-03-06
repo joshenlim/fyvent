@@ -31,6 +31,10 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
     final container = AppStateContainer.of(context);
     final firebaseStorageUrl = 'https://firebasestorage.googleapis.com/v0/b/fyvent-27d5a.appspot.com/o/';
 
+    String username = container.state.user != null ? container.state.user.getName() : "User";
+    String email = container.state.user != null ? container.state.user.getEmail() : "Email";
+    String imgUrl = container.state.user != null ? container.state.user.getPhotoUrl() : "";
+
     Widget _appBar = new AppBar(
       title: new Image.asset('assets/images/logo-color.png', width: 20.0),
       backgroundColor: Colors.white,
@@ -83,9 +87,9 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
 
     return new Scaffold(
       drawer: SideMenu(
-        name: container.state.user.getName(),
-        email: container.state.user.getEmail(),
-        imgUrl: container.state.user.getPhotoUrl()
+        name: username,
+        email: email,
+        imgUrl: imgUrl,
       ),
       appBar: _appBar,
       body: Stack(
