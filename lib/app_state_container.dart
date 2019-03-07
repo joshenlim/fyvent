@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fyvent/models/app_state.dart';
 import 'package:fyvent/models/user.dart';
 import 'package:fyvent/utils/auth.dart';
+import 'package:fyvent/utils/firestore.dart';
 
 class AppStateContainer extends StatefulWidget {
   final AppState state;
@@ -29,6 +30,7 @@ class AppStateContainer extends StatefulWidget {
 class _AppStateContainerState extends State<AppStateContainer> {
   AppState state;
   Authentication auth = new Authentication();
+  CloudFirestore db = new CloudFirestore();
 
   @override
   void initState() {
@@ -45,12 +47,10 @@ class _AppStateContainerState extends State<AppStateContainer> {
           final String photoUrl = user.photoUrl;
           User userProfile = new User(id, name, email, photoUrl);
           this.setState(() {
-            state.isLoading = false;
             state.user = userProfile;
           }); 
         } else {
           this.setState(() {
-            state.isLoading = false;
             state.user = null;
           });
         }
@@ -63,10 +63,22 @@ class _AppStateContainerState extends State<AppStateContainer> {
   }
 
   Future<bool> logIn() async {
-    FirebaseUser firebaseUser = await auth.logIntoFirebase();
-    print("USERERRR:" + firebaseUser.toString());
-    if (firebaseUser != null) return true;
+    FirebaseUser user = await auth.logIntoFirebase();
+    final String id = user.uid;
+    final String name = user.displayName;
+    final String email = user.email;
+    final String photoUrl = user.photoUrl;
+    User userProfile = new User(id, name, email, photoUrl);
+    this.setState(() {
+      state.user = userProfile;
+    });
+
+    bool userExists = await db.checkIfUserExists(id);
+    if (!userExists) db.addNewUser(userProfile);
+    
+    if (user != null) return true;
     return false;
+
   }
 
   @override
@@ -79,25 +91,12 @@ class _AppStateContainerState extends State<AppStateContainer> {
 }
 
 class _InheritedStateContainer extends InheritedWidget {
-  // The data is whatever this widget is passing down.
   final _AppStateContainerState data;
-
-  // InheritedWidgets are always just wrappers.
-  // So there has to be a child, 
-  // Although Flutter just knows to build the Widget thats passed to it
-  // So you don't have have a build method or anything.
   _InheritedStateContainer({
     Key key,
     @required this.data,
     @required Widget child,
   }) : super(key: key, child: child);
-  
-  // This is a better way to do this, which you'll see later.
-  // But basically, Flutter automatically calls this method when any data
-  // in this widget is changed. 
-  // You can use this method to make sure that flutter actually should
-  // repaint the tree, or do nothing.
-  // It helps with performance.
   @override
   bool updateShouldNotify(_InheritedStateContainer old) => true;
 }

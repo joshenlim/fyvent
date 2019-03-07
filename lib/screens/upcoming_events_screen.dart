@@ -25,15 +25,16 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
       });
     });
   }
+  
 
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     final container = AppStateContainer.of(context);
     final firebaseStorageUrl = 'https://firebasestorage.googleapis.com/v0/b/fyvent-27d5a.appspot.com/o/';
 
-    String username = container.state.user != null ? container.state.user.getName() : "User";
-    String email = container.state.user != null ? container.state.user.getEmail() : "Email";
-    String imgUrl = container.state.user != null ? container.state.user.getPhotoUrl() : "";
+    String username = container.state.user.getName();
+    String email = container.state.user.getEmail();
+    String imgUrl = container.state.user.getPhotoUrl();
 
     Widget _appBar = new AppBar(
       title: new Image.asset('assets/images/logo-color.png', width: 20.0),
