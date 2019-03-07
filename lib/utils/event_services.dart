@@ -26,3 +26,11 @@ Future<List<Event>> getEvents(int qty) async{
     });
   return eventsFromJson(response.body);
 }
+
+bool checkIfEventInFavourites(List favourites, int id) {
+  bool found = false;
+  favourites.forEach((item) {
+    if (item['id'] == id) found = true;
+  });
+  return found;
+}

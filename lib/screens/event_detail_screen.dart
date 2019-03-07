@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fyvent/models/event.dart';
 import 'package:fyvent/app_state_container.dart';
-import 'package:fyvent/models/app_state.dart';
+import 'package:fyvent/utils/event_services.dart';
 
 
 class EventDetailScreen extends StatefulWidget {
@@ -21,7 +21,6 @@ class EventDetailScreenState extends State<EventDetailScreen> {
   bool favourited;
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _controller = Completer();
-  AppState appState;
 
   @override
   void initState() {
@@ -32,6 +31,12 @@ class EventDetailScreenState extends State<EventDetailScreen> {
 
   Widget get _favouriteButton {
     final container = AppStateContainer.of(context);
+    List<Map> userFavourites = container.state.user.getFavourites();
+    int eventId = event.getId();
+
+    setState(() {
+      favourited = checkIfEventInFavourites(userFavourites, eventId);
+    });
 
     void _favouriteEvent() {
       container.updateFavourites(container.state.user, event);

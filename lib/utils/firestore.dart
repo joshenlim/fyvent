@@ -2,16 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:fyvent/models/user.dart';
 import 'package:fyvent/models/event.dart';
+import 'package:fyvent/utils/event_services.dart';
 
 class CloudFirestore {
-
-  bool checkIfEventInFavourites(List favourites, int id) {
-    bool found = false;
-    favourites.forEach((item) {
-      if (item['id'] == id) found = true;
-    });
-    return found;
-  }
 
   Future<bool> checkIfUserExists(String id) async {
     DocumentSnapshot snapshot = await Firestore.instance.collection('users').document(id).get();
