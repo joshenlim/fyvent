@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:fyvent/models/app_state.dart';
 import 'package:fyvent/models/user.dart';
+import 'package:fyvent/models/event.dart';
 import 'package:fyvent/utils/auth.dart';
 import 'package:fyvent/utils/firestore.dart';
 
@@ -45,10 +46,13 @@ class _AppStateContainerState extends State<AppStateContainer> {
           final String name = user.displayName;
           final String email = user.email;
           final String photoUrl = user.photoUrl;
-          User userProfile = new User(id, name, email, photoUrl);
-          this.setState(() {
-            state.user = userProfile;
-          }); 
+          db.getFavourites(id).then((res) {
+            List<Map> favourites = res;
+            User userProfile = new User(id, name, email, photoUrl, favourites);
+            this.setState(() {
+              state.user = userProfile;
+            }); 
+          });
         } else {
           this.setState(() {
             state.user = null;
@@ -68,7 +72,9 @@ class _AppStateContainerState extends State<AppStateContainer> {
     final String name = user.displayName;
     final String email = user.email;
     final String photoUrl = user.photoUrl;
-    User userProfile = new User(id, name, email, photoUrl);
+    final List<Map> favourites = await db.getFavourites(id);
+
+    User userProfile = new User(id, name, email, photoUrl, favourites);
     this.setState(() {
       state.user = userProfile;
     });
@@ -78,7 +84,10 @@ class _AppStateContainerState extends State<AppStateContainer> {
     
     if (user != null) return true;
     return false;
+  }
 
+  Future<void> updateFavourites(User user, Event event) async {
+    return await db.updateFavourites(user, event);
   }
 
   @override

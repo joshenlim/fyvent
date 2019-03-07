@@ -3,12 +3,14 @@ class User {
   String _name;
   String _email;
   String _photoUrl;
+  List<Map> _favourites;
 
-  User(id, name, email, photoUrl) {
+  User(String id, String name, String email, String photoUrl, List<Map> favourites) {
     this._id = id;
     this._name = name;
     this._email = email;
     this._photoUrl = photoUrl;
+    this._favourites = favourites;
   }
 
   String getName() {
@@ -25,5 +27,9 @@ class User {
 
   String getPhotoUrl() {
     return _photoUrl;
+  }
+
+  List<Map> getFavourites() {
+    return _favourites;
   }
 }

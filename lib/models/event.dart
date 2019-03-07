@@ -82,6 +82,24 @@ class Event {
   double getLng() {
     return this.lng;
   }
+  
+  Map toObject() {
+    return {
+      'id'            : this.id,
+      'name'          : this.name,
+      'description'   : this.description,
+      'address'       : this.address,
+      'locationDesc'  : this.locationDesc,
+      'datetimeStart' : this.datetimeStart,
+      'datetimeEnd'   : this.datetimeEnd,
+      'datetimeRange' : this.datetimeRange,
+      'category'      : this.category,
+      'imgUrl'        : this.imgUrl,
+      'webUrl'        : this.webUrl,
+      'lat'           : this.lat,
+      'lng'           : this.lng,
+    };
+  }
 
   factory Event.fromJson(Map<String, dynamic> parsedJson){
 

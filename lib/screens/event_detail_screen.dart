@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:fyvent/models/event.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:fyvent/models/event.dart';
+import 'package:fyvent/app_state_container.dart';
+import 'package:fyvent/models/app_state.dart';
+
 
 class EventDetailScreen extends StatefulWidget {
   final Event event;
@@ -18,12 +21,34 @@ class EventDetailScreenState extends State<EventDetailScreen> {
   bool favourited;
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _controller = Completer();
+  AppState appState;
 
   @override
   void initState() {
     super.initState();
     event = widget.event;
     favourited = false;
+  }
+
+  Widget get _favouriteButton {
+    final container = AppStateContainer.of(context);
+
+    void _favouriteEvent() {
+      container.updateFavourites(container.state.user, event);
+      setState(() {
+        favourited = !favourited;
+      });
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        content: Text(favourited ? "Added event to favourites" : "Removed event from favourites"),
+        duration: const Duration(seconds: 1),
+      ));
+    }
+
+    return new IconButton(
+      icon: favourited ? new Icon(Icons.favorite) : new Icon(Icons.favorite_border),
+      color: favourited ? Colors.red : Colors.black,
+      onPressed: () => _favouriteEvent(),
+    );
   }
 
   Widget build(BuildContext context) {
@@ -67,16 +92,6 @@ class EventDetailScreenState extends State<EventDetailScreen> {
     TextStyle _bodyStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300);
     TextStyle _urlStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, color: Colors.blue);
     TextStyle _headerStyle = new TextStyle(fontFamily: 'Greycliff',fontSize: 22.0);
-
-    void _favouriteEvent() {
-      setState(() {
-        favourited = !favourited;
-      });
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        content: Text(favourited ?  "Added event to favourites" : "Removed event from favourites"),
-        duration: const Duration(seconds: 1),
-      ));
-    }
 
     Widget _appBar = new AppBar(
       title: new Text("Event Details"),
@@ -177,11 +192,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
             flex: 1,
             child: new Column(
               children: [
-                new IconButton(
-                  icon: favourited ? new Icon(Icons.favorite) : new Icon(Icons.favorite_border),
-                  color: favourited ? Colors.red : Colors.black,
-                  onPressed: () => _favouriteEvent(),
-                ),
+                _favouriteButton,
               ]
             )
           ),
