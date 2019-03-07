@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fyvent/app_state_container.dart';
+import 'package:fyvent/screens/favourites_screen.dart';
 
 class SideMenu extends StatelessWidget {
   final String name;
@@ -11,10 +12,18 @@ class SideMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final container = AppStateContainer.of(context);
+
     void _signOut() {
       container.signOut().then((_) {
         Navigator.pushReplacementNamed(context, '/');
       });
+    }
+
+    void _viewFavourites() {
+      Navigator.of(context).pop();
+      Navigator.of(context).push(MaterialPageRoute<void>(
+        builder: (BuildContext context) => FavouritesScreen()
+      ));
     }
 
     return new Drawer(
@@ -56,7 +65,7 @@ class SideMenu extends StatelessWidget {
           ListTile(
             title: Text("Favourites"),
             leading: Icon(Icons.favorite_border),
-            onTap: () {print("Fav");},
+            onTap: () => _viewFavourites(),
           ),
           ListTile(
             title: Text("Log out"),

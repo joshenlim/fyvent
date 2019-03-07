@@ -34,3 +34,11 @@ bool checkIfEventInFavourites(List favourites, int id) {
   });
   return found;
 }
+
+bool checkIfEventInUserFavourites(List<Event> favourites, int id) {
+  bool found = false;
+  favourites.forEach((item) {
+    if (item.getId() == id) found = true;
+  });
+  return found;
+}

@@ -101,6 +101,24 @@ class Event {
     };
   }
 
+  factory Event.fromObject(Map<dynamic, dynamic> eventObject) {
+    return Event(
+      id            : eventObject['id'],
+      name          : eventObject['name'],
+      description   : eventObject['description'],
+      address       : eventObject['address'],
+      locationDesc  : eventObject['locationDesc'],
+      datetimeStart : eventObject['datetimeStart'],
+      datetimeEnd   : eventObject['datetimeEnd'],
+      datetimeRange : eventObject['datetimeRange'],
+      category      : eventObject['category'],
+      imgUrl        : eventObject['imgUrl'],
+      webUrl        : eventObject['webUrl'],
+      lat           : eventObject['lat'],
+      lng           : eventObject['lng'],
+    );
+  }
+
   factory Event.fromJson(Map<String, dynamic> parsedJson){
 
     String parsedImgUrl = parsedJson['images']['images'][0]['transforms']['transforms'].last['url'].substring(2);

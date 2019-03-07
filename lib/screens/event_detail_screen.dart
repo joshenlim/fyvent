@@ -31,11 +31,11 @@ class EventDetailScreenState extends State<EventDetailScreen> {
 
   Widget get _favouriteButton {
     final container = AppStateContainer.of(context);
-    List<Map> userFavourites = container.state.user.getFavourites();
+    List<Event> userFavourites = container.state.user.getFavourites();
     int eventId = event.getId();
 
     setState(() {
-      favourited = checkIfEventInFavourites(userFavourites, eventId);
+      favourited = checkIfEventInUserFavourites(userFavourites, eventId);
     });
 
     void _favouriteEvent() {
@@ -43,6 +43,11 @@ class EventDetailScreenState extends State<EventDetailScreen> {
       setState(() {
         favourited = !favourited;
       });
+      if (favourited) {
+        container.state.user.addToFavourites(event);
+      } else {
+        container.state.user.removeFromFavourites(event);
+      }
       _scaffoldKey.currentState.showSnackBar(new SnackBar(
         content: Text(favourited ? "Added event to favourites" : "Removed event from favourites"),
         duration: const Duration(seconds: 1),
