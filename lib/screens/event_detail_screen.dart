@@ -328,7 +328,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
           children: [
             _eventHeroImage,
             _eventDetailsCard,
-            // _eventLocationCard,
+            _eventLocationCard,
             _eventDescriptionCard,
             _eventActionsCard,
           ]
