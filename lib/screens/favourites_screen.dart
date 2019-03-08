@@ -39,8 +39,11 @@ class FavouritesScreenState extends State<FavouritesScreen> {
     Widget body = new Container(
       width: width,
       child: _eventList.length != 0 ? new ListView.builder(
-        itemCount: _eventList.length,
+        itemCount: _eventList.length + 1,
         itemBuilder: (context, index) {
+          if (index == _eventList.length) {
+            return new Padding(padding: const EdgeInsets.only(top: 20.0));
+          }
           return EventCard(event: _eventList[index]);
         },
       ) : new Container(
