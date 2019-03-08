@@ -22,6 +22,29 @@ class EventDetailScreenState extends State<EventDetailScreen> {
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   Completer<GoogleMapController> _controller = Completer();
 
+  // START: Styling information
+  final _cardPadding = const EdgeInsets.all(20.0);
+  final _cardMargin = const EdgeInsets.only(top:20.0, left: 20.0, right: 20.0);
+  final _lastCardMargin = const EdgeInsets.all(20.0);
+  TextStyle _cardHeaderStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, fontSize: 13.0, color: Colors.black38);
+  TextStyle _cardDescStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, height: 1.2);
+  TextStyle _bodyStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300);
+  TextStyle _urlStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, color: Colors.blue);
+  TextStyle _headerStyle = new TextStyle(fontFamily: 'Greycliff',fontSize: 22.0);
+
+  final _cardDecoration = new BoxDecoration(
+    borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
+    color: Colors.white,
+    boxShadow: [
+      new BoxShadow(
+        color: Colors.black12,
+        blurRadius: 5.0,
+        offset:Offset(0, 2)
+      ),
+    ]
+  );
+  // END: Styling information
+
   @override
   void initState() {
     super.initState();
@@ -61,55 +84,9 @@ class EventDetailScreenState extends State<EventDetailScreen> {
     );
   }
 
-  Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    final _cardPadding = const EdgeInsets.all(20.0);
-    final _cardMargin = const EdgeInsets.only(top:20.0, left: 20.0, right: 20.0);
-    final _lastCardMargin = const EdgeInsets.all(20.0);
+  Widget _eventHeroImage(double width) {
     final String imgUrl = event.getImgUrl();
-    final String webUrl = event.getWebUrl();
-
-    final _cardDecoration = new BoxDecoration(
-      borderRadius: new BorderRadius.all(const Radius.circular(5.0)),
-      color: Colors.white,
-      boxShadow: [
-        new BoxShadow(
-          color: Colors.black12,
-          blurRadius: 5.0,
-          offset:Offset(0, 2)
-        ),
-      ]
-    );
-
-    final MarkerId markerId = MarkerId("marker_1");
-    Map<MarkerId, Marker> markers = <MarkerId, Marker>{
-      markerId: Marker(
-      markerId: markerId,
-        position: LatLng(
-          event.getLat(),
-          event.getLng(),
-        ),
-      )
-    };
-
-    final CameraPosition _eventLocation = CameraPosition(
-      target: LatLng(event.getLat(), event.getLng()),
-      zoom: 14.4746,
-    );
-
-    TextStyle _cardHeaderStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, fontSize: 13.0, color: Colors.black38);
-    TextStyle _cardDescStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, height: 1.2);
-    TextStyle _bodyStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300);
-    TextStyle _urlStyle = new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, color: Colors.blue);
-    TextStyle _headerStyle = new TextStyle(fontFamily: 'Greycliff',fontSize: 22.0);
-
-    Widget _appBar = new AppBar(
-      title: new Text("Event Details"),
-      backgroundColor: Colors.white,
-      iconTheme: new IconThemeData(color: Colors.cyan),
-    );
-
-    Widget _eventHeroImage = Hero(
+    return Hero(
       tag: imgUrl,
       child: Container(
         child: new Image.network(
@@ -118,8 +95,58 @@ class EventDetailScreenState extends State<EventDetailScreen> {
         ),
       ),
     );
+  }
 
-    Widget _eventDetailsCard = new Container(
+  Widget _eventLocationCard(double width) {
+    final MarkerId markerId = MarkerId("marker_1");
+    final Map<MarkerId, Marker> markers = <MarkerId, Marker>{
+      markerId: Marker(
+      markerId: markerId,
+        position: LatLng(
+          event.getLat(),
+          event.getLng(),
+        ),
+      )
+    };
+    final CameraPosition _eventLocation = CameraPosition(
+      target: LatLng(event.getLat(), event.getLng()),
+      zoom: 14.4746,
+    );
+
+    return new Container(
+      padding: _cardPadding,
+      margin: _cardMargin,
+      width: width,
+      decoration: _cardDecoration,
+      child: new Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          new Text("Event Location", style:_cardHeaderStyle),
+          new Padding(padding: const EdgeInsets.only(top: 10.0)),
+          new Container(
+            height: 200,
+            width: width,
+            child: GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: _eventLocation,
+              onMapCreated: (GoogleMapController controller) {
+                _controller.complete(controller);
+              },
+              scrollGesturesEnabled: false,
+              rotateGesturesEnabled: false,
+              tiltGesturesEnabled: false,
+              markers: Set<Marker>.of(markers.values),
+            ),
+          ),
+        ]
+      )
+    );
+  }
+
+  Widget _eventDetailsCard(width) {
+    final String webUrl = event.getWebUrl();
+    return new Container(
       padding: _cardPadding,
       margin: _cardMargin,
       width: width,
@@ -209,8 +236,10 @@ class EventDetailScreenState extends State<EventDetailScreen> {
         ]
       )
     );
+  }
 
-    Widget _eventDescriptionCard = new Container(
+  Widget _eventDescriptionCard(double width) {
+    return new Container(
       padding: _cardPadding,
       margin: _cardMargin,
       width: width,
@@ -225,38 +254,10 @@ class EventDetailScreenState extends State<EventDetailScreen> {
         ]
       )
     );
+  }
 
-    Widget _eventLocationCard = new Container(
-      padding: _cardPadding,
-      margin: _cardMargin,
-      width: width,
-      decoration: _cardDecoration,
-      child: new Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          new Text("Event Location", style:_cardHeaderStyle),
-          new Padding(padding: const EdgeInsets.only(top: 10.0)),
-          new Container(
-            height: 200,
-            width: width,
-            child: GoogleMap(
-              mapType: MapType.normal,
-              initialCameraPosition: _eventLocation,
-              onMapCreated: (GoogleMapController controller) {
-                _controller.complete(controller);
-              },
-              scrollGesturesEnabled: false,
-              rotateGesturesEnabled: false,
-              tiltGesturesEnabled: false,
-              markers: Set<Marker>.of(markers.values),
-            ),
-          ),
-        ]
-      )
-    );
-
-    Widget _eventActionsCard = new Container(
+  Widget _eventActionsCard(double width) {
+    return new Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
       margin: _lastCardMargin,
       width: width,
@@ -337,6 +338,17 @@ class EventDetailScreenState extends State<EventDetailScreen> {
         ]
       )
     );
+  }
+
+  Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    final bool eventHasLatLng = (event.getLat() != null) && (event.getLng() != null);
+
+    Widget _appBar = new AppBar(
+      title: new Text("Event Details"),
+      backgroundColor: Colors.white,
+      iconTheme: new IconThemeData(color: Colors.cyan),
+    );
 
     return Scaffold(
       appBar: _appBar,
@@ -347,11 +359,11 @@ class EventDetailScreenState extends State<EventDetailScreen> {
         child: new ListView(
           shrinkWrap: true,
           children: [
-            _eventHeroImage,
-            _eventDetailsCard,
-            _eventLocationCard,
-            _eventDescriptionCard,
-            _eventActionsCard,
+            _eventHeroImage(width),
+            _eventDetailsCard(width),
+            eventHasLatLng ? _eventLocationCard(width) : new Padding(padding: const EdgeInsets.only(top: 0.0)),
+            _eventDescriptionCard(width),
+            _eventActionsCard(width),
           ]
         ),
       ),
