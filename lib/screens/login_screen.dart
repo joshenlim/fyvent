@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:fyvent/models/app_state.dart';
 import 'package:fyvent/app_state_container.dart';
 
+import 'package:permission_handler/permission_handler.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   LoginScreenState createState() => new LoginScreenState();
@@ -78,8 +80,15 @@ class LoginScreenState extends State<LoginScreen>
     final container = AppStateContainer.of(context);
 
     void _logIn() {
-      container.logIn().then((res) {
-        if (res) Navigator.pushReplacementNamed(context, '/home');
+      container.logIn().then((res) async {
+        if (res) {
+          PermissionStatus permissionStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
+          if (permissionStatus ==PermissionStatus.denied) {
+            List<PermissionGroup> permissions = <PermissionGroup>[PermissionGroup.location];
+            await PermissionHandler().requestPermissions(permissions);
+          }
+          Navigator.pushReplacementNamed(context, '/home');
+        }
       });
     }
 
