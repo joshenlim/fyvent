@@ -25,6 +25,17 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
       });
     });
   }
+
+  Future<Null> refreshList() async{
+    await Future.delayed(Duration(seconds: 2));
+    print('refreshing events...');
+    getEvents(10).then((res) {
+      setState(() {
+        _eventList = res;
+      });
+    });
+    return null;
+  }
   
 
   Widget build(BuildContext context) {
@@ -37,7 +48,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
     String imgUrl = container.state.user.getPhotoUrl();
 
     Widget _appBar = new AppBar(
-      title: new Image.asset('assets/images/logo-color.png', width: 20.0),
+      title: new Image.asset('assets/images/logo-color.png', width: 20.0,),
       backgroundColor: Colors.white,
       iconTheme: new IconThemeData(color: Colors.cyan),
       actions: [
@@ -52,39 +63,43 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
 
     Widget body = new Container(
       width: width,
-      child: _eventList.length != 0 ? new ListView.builder(
-        itemBuilder: (context, index) {
-          if (index >= _eventList.length - 3) {
-            getEvents(5).then((res) {
-              _eventList.addAll(res);
-            });
-            // Next up: How to load events which are not already shown on the screen
-            // Have to look into the api
-          }
-          if (index == 0) {
-            return FeaturedEventCard(
-              imgUrl: firebaseStorageUrl + "featured.jpg?alt=media&token=e68a1975-50ca-42c3-b38a-6ac587b8fbd0",
-              title: "Tis The Sea-sun",
-              description: "Beach Getaway Expo",
-              datetime: "16 July 2019 • 10:00 AM",
-              address: "Suntec City - Event Hall 3",
-            );
-          } else if (index == 1) {
-            return new Container(
-              margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-              child: new Text(
-                "Upcoming Events:",
-                style: new TextStyle(fontFamily: 'Greycliff', fontSize: 18.0),
-              ),
-            );
-          } else {
-            return EventCard(event: _eventList[index - 2]);
-          }
-        },
-      ) : new Center(
-        child: new CircularProgressIndicator(),
-      )
-    );
+      child: new RefreshIndicator(
+        onRefresh: refreshList,
+        child: _eventList.length != 0 ? new ListView.builder(
+          itemCount: _eventList.length,
+          itemBuilder: (context, index) {
+            /*if (index >= _eventList.length - 3) {
+              getEvents(5).then((res) {
+                _eventList.addAll(res);
+              });
+              // Next up: How to load events which are not already shown on the screen
+              // Have to look into the api
+            }*/
+            if (index == 0) {
+              return FeaturedEventCard(
+                imgUrl: firebaseStorageUrl + "featured.jpg?alt=media&token=e68a1975-50ca-42c3-b38a-6ac587b8fbd0",
+                title: "Tis The Sea-sun",
+                description: "Beach Getaway Expo",
+                datetime: "10 March 2019 • 10:00 AM",
+                address: "Suntec City - Event Hall 3",
+              );
+            } else if (index == 1) {
+              return new Container(
+                margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+                child: new Text(
+                  "Upcoming Events:",
+                  style: new TextStyle(fontFamily: 'Greycliff', fontSize: 18.0),
+                ),
+              );
+            }
+             else {
+              return EventCard(event: _eventList[index - 2]);
+            }
+          },
+        ) : new Center(
+          child: new CircularProgressIndicator(),
+        ))
+      );
 
     return new Scaffold(
       drawer: SideMenu(
