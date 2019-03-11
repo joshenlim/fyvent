@@ -20,7 +20,8 @@ List<Event> eventsFromJson(String str) {
 }
 
 Future<List<Event>> getEvents(int qty) async{
-  final response = await http.get('$_apiUrl?rows=$qty',
+  DateTime dt =DateTime.now();
+  final response = await http.get('$_apiUrl?rows=$qty&start_date=$dt',
     headers: {
       'authorization' : basicAuth
     });
