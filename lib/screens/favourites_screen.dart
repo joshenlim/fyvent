@@ -22,7 +22,7 @@ class FavouritesScreenState extends State<FavouritesScreen> {
     var width = MediaQuery.of(context).size.width;
     final container = AppStateContainer.of(context);
     setState(() {
-      _eventList = container.state.user.getFavourites();
+      _eventList = container.state.user.getFavourites().reversed.toList();
     });
 
     Widget _appBar = new AppBar(
