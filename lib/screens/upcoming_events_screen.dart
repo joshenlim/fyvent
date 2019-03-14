@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fyvent/app_state_container.dart';
 import 'package:fyvent/utils/event_services.dart';
 import 'package:fyvent/models/event.dart';
@@ -51,6 +52,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
       title: new Image.asset('assets/images/logo-color.png', width: 20.0,),
       backgroundColor: Colors.white,
       iconTheme: new IconThemeData(color: Colors.cyan),
+      centerTitle: true,
       actions: [
         new IconButton(
           icon: const Icon(Icons.search),
@@ -97,7 +99,10 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
             }
           },
         ) : new Center(
-          child: new CircularProgressIndicator(),
+          child: SpinKitRipple(
+            color: Colors.teal,
+            size: 50.0,
+          ),
         ))
       );
 

@@ -4,6 +4,7 @@ import 'package:fyvent/models/app_state.dart';
 import 'package:fyvent/app_state_container.dart';
 
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -16,6 +17,7 @@ class LoginScreenState extends State<LoginScreen>
   AnimationController _logoBouncecontroller;
   Animation<double> _logoBounceAnimation;
   AppState appState;
+  bool isLoggingIn = false;
 
   @override
   void initState() {
@@ -75,11 +77,40 @@ class LoginScreenState extends State<LoginScreen>
       )
     );
   }
+
+  Widget get _loadingIndicator {
+    return new Container(
+      alignment: Alignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SpinKitThreeBounce(
+            color: Colors.white,
+            size: 22.0,
+          ),
+          new Padding(padding: const EdgeInsets.only(top: 10.0)),
+          new Text(
+            "Logging in",
+            style: new TextStyle(
+              color: Colors.white,
+              fontFamily: 'Roboto',
+              fontWeight: FontWeight.w300,
+              fontSize: 14.0,
+            ),
+          ),
+        ]
+      ),
+    );
+  }
   
   Widget get _loginButton {
     final container = AppStateContainer.of(context);
 
     void _logIn() {
+      setState(() {
+        isLoggingIn = true;
+      });
       container.logIn().then((res) async {
         if (res) {
           PermissionStatus permissionStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
@@ -131,9 +162,6 @@ class LoginScreenState extends State<LoginScreen>
     var container = AppStateContainer.of(context);
     var width = MediaQuery.of(context).size.width;
     appState = container.state;
-
-    // if (appState.user != null) print("login screen: " + appState.user.getName());
-
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return new Scaffold(
@@ -153,7 +181,7 @@ class LoginScreenState extends State<LoginScreen>
               _logo,
               _logoName,
               _description,
-              _loginButton,
+              isLoggingIn ? _loadingIndicator : _loginButton,
             ],
           ),
         ),
