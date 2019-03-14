@@ -16,11 +16,6 @@ class FavouritesScreenState extends State<FavouritesScreen> {
   @override
   void initState() {
     super.initState();
-    // getEvents(10).then((res) {
-    //   setState(() {
-    //     _eventList = res;
-    //   });
-    // });
   }
 
   Widget build(BuildContext context) {
@@ -54,7 +49,11 @@ class FavouritesScreenState extends State<FavouritesScreen> {
           children: [
             new Icon(Icons.event_note, size: 40.0, color: Colors.black26),
             new Padding(padding: const EdgeInsets.only(top: 10.0)),
-            new Text("You've yet to favourite any event!", style: new TextStyle(fontSize: 16.0, color: Colors.black26), textAlign: TextAlign.center),
+            new Text(
+              "You've yet to favourite any event!",
+              style: new TextStyle(fontSize: 16.0, color: Colors.black26),
+              textAlign: TextAlign.center
+            ),
           ]
         ),
       )
