@@ -3,9 +3,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fyvent/app_state_container.dart';
 import 'package:fyvent/utils/event_services.dart';
 import 'package:fyvent/models/event.dart';
+
 import 'package:fyvent/components/FeaturedEventCard.dart';
 import 'package:fyvent/components/EventCard.dart';
 import 'package:fyvent/components/SideMenu.dart';
+import 'package:fyvent/components/EventSearch.dart';
 
 
 class UpcomingEventsScreen extends StatefulWidget {
@@ -13,83 +15,6 @@ class UpcomingEventsScreen extends StatefulWidget {
   UpcomingEventsScreenState createState() {
     return new UpcomingEventsScreenState();
   }
-}
-
-class DataSearch extends SearchDelegate<String>{
-
-  List<Event> _searchEvents = List<Event>();
-
-  @override
-  List<Widget> buildActions(BuildContext context) {
-     return [
-      IconButton(icon: Icon(Icons.filter_list),
-      onPressed: (){
-        print("You pressed Filter");
-      },)
-      ,
-      IconButton(
-        icon: Icon(Icons.clear),
-        onPressed: () {
-          query = "";
-        },
-      )
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-      return IconButton(
-          icon: AnimatedIcon(
-            icon: AnimatedIcons.menu_arrow,
-            progress: transitionAnimation,
-          ),
-          onPressed: () {
-            close(context, null);
-          },
-      );
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container();
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    //print("buildSuggestions:" + query);
-
-    /*
-      Steps:
-        -1. Write a new method to getEvents filtered by name, taking in a single parameter for the search string
-        -2. Call that method with the query string
-        3. Instantiate an empty List to store your filtered events
-        4. Save the retrieved results from the new method to filtered events
-        5. return a ListView Builder that populates from that saved list (empty state should show accordingly)
-        IMPT: API calls are slow, might need to think of a way to throttle the search
-        otherwise, you can imagine, as i type "hello" in the search field, the app is going to call
-        the search method 5 times
-    */
-     searchEvents(query).then((res) {
-      _searchEvents = res;
-    });
-
-    // _searchEvents.forEach((event) {
-    //   print("search: " + event.getName()); 
-    // });
-
-    // Throttling
-    // This method fires at every key input
-    // Detect user input, when he stops typing after 2 seconds
-    // Then you call the API
-
-    return ListView.builder(
-            itemBuilder: (context, index) {
-              return EventCard(event: _searchEvents[index]);
-            } ,
-            itemCount: _searchEvents.length,
-          ); 
-
-  } //End widget
 }
 
 class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
@@ -107,7 +32,6 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
 
   Future<Null> refreshList() async{
     await Future.delayed(Duration(seconds: 2));
-    //print('refreshing events...');
     getEvents(10).then((res) {
       setState(() {
         _eventList = res;
@@ -134,10 +58,9 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
         new IconButton(
           icon: const Icon(Icons.search),
           onPressed: () {
-            //print("wooo");
               showSearch(
                 context: context, 
-                delegate: DataSearch()
+                delegate: EventSearch()
               );
           },
         )
