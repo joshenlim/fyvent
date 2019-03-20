@@ -3,9 +3,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fyvent/app_state_container.dart';
 import 'package:fyvent/utils/event_services.dart';
 import 'package:fyvent/models/event.dart';
+
 import 'package:fyvent/components/FeaturedEventCard.dart';
 import 'package:fyvent/components/EventCard.dart';
 import 'package:fyvent/components/SideMenu.dart';
+import 'package:fyvent/components/EventSearch.dart';
+
 
 class UpcomingEventsScreen extends StatefulWidget {
   @override
@@ -29,7 +32,6 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
 
   Future<Null> refreshList() async{
     await Future.delayed(Duration(seconds: 2));
-    print('refreshing events...');
     getEvents(10).then((res) {
       setState(() {
         _eventList = res;
@@ -38,7 +40,6 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
     return null;
   }
   
-
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     final container = AppStateContainer.of(context);
@@ -57,7 +58,10 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
         new IconButton(
           icon: const Icon(Icons.search),
           onPressed: () {
-            print("wooo");
+              showSearch(
+                context: context, 
+                delegate: EventSearch()
+              );
           },
         )
       ]

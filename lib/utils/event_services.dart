@@ -28,6 +28,15 @@ Future<List<Event>> getEvents(int qty) async{
   return eventsFromJson(response.body);
 }
 
+Future<List<Event>> searchEvents(String query) async{
+  await Future.delayed(Duration(seconds: 1));
+  final response = await http.get('$_apiUrl?q=$query',
+    headers: {
+      'authorization' : basicAuth
+    });
+  return eventsFromJson(response.body);
+}
+
 bool checkIfEventInFavourites(List favourites, int id) {
   bool found = false;
   favourites.forEach((item) {
