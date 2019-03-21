@@ -17,3 +17,8 @@ Do download the required resources below if you have if they aren't installed on
 
 - [Flutter](https://flutter.dev/)
 
+## Testing
+
+You may follow the following command to run the unit tests within the repository
+
+`flutter test test/test_name.dart`
