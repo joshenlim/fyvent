@@ -56,5 +56,14 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<string>YES</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>googlechromes</string>
+		<string>comgooglemaps</string>
+	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Fyvent uses your location for navigation to events.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Fyvent uses your location for navigation to events.</string>
 </dict>
 </plist>

@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import 'package:fyvent/models/event.dart';
 import 'package:fyvent/app_state_container.dart';
 import 'package:fyvent/utils/event_services.dart';
@@ -274,6 +275,16 @@ class EventDetailScreenState extends State<EventDetailScreen> {
   }
 
   Widget _eventActionsCard(double width) {
+    void _launchMaps() async {
+      final String destAddress = event.getLocationDesc().replaceAll(" ", "+");
+      final String mapsUrl = "https://www.google.com/maps/dir/?api=1&destination=$destAddress" + 
+        "&travelmode=driving";
+      if (await canLaunch(mapsUrl)) {
+        print('launching com googleUrl');
+        await launch(mapsUrl);
+      }
+    }
+
     return new Container(
       padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 30.0),
       margin: _lastCardMargin,
@@ -344,7 +355,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
                   ),
                   child: new IconButton(
                     icon: new Icon(Icons.directions_car, size: 28.0),
-                    onPressed: () {print("yo");},
+                    onPressed: () => _launchMaps(),
                   ),
                 ),
                 new Padding(padding: const EdgeInsets.only(top: 10.0)),
