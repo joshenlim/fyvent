@@ -89,10 +89,11 @@ class EventDetailScreenState extends State<EventDetailScreen> {
   Widget get _calendarbutton{
     void _addToGoogleCalendars(){
       insertEvent(event.getDatetimeStart(), event.datetimeEnd, event.getName(), event.getLocationDesc());
-      _scaffoldKey.currentState.showSnackBar(new SnackBar(
-        content: Text("Added event to Google Calendar"),
-        duration: const Duration(seconds: 1),
-      ));
+      // _scaffoldKey.currentState.showSnackBar(new SnackBar(
+      //   content: Text("Added event to Google Calendar"),
+      //   duration: const Duration(seconds: 1),
+      // ));
+      getCalendarEvents();
     }
 
     return new IconButton(

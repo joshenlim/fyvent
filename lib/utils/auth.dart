@@ -7,7 +7,11 @@ class Authentication {
   FirebaseUser firebaseUser;
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final googleSignIn = new GoogleSignIn();
+  final googleSignIn = new GoogleSignIn(
+    scopes: [
+      'https://www.googleapis.com/auth/calendar.events'
+    ]
+  );
 
   Future<void> signOut() async {
     await _auth.signOut().then((_) {
