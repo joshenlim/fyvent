@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:fyvent/models/event.dart';
 import 'package:fyvent/app_state_container.dart';
 import 'package:fyvent/utils/event_services.dart';
+import 'package:fyvent/utils/google_calendar.dart';
 
 
 class EventDetailScreen extends StatefulWidget {
@@ -81,6 +82,21 @@ class EventDetailScreenState extends State<EventDetailScreen> {
       icon: favourited ? new Icon(Icons.favorite) : new Icon(Icons.favorite_border),
       color: favourited ? Colors.red : Colors.black,
       onPressed: () => _favouriteEvent(),
+    );
+  }
+
+  Widget get _calendarbutton{
+    void _addToGoogleCalendars(){
+      insertEvent(event.getDatetimeStart(), event.datetimeEnd, event.getName(), event.getLocationDesc());
+      _scaffoldKey.currentState.showSnackBar(new SnackBar(
+        content: Text("Added event to Google Calendar"),
+        duration: const Duration(seconds: 1),
+      ));
+    }
+
+    return new IconButton(
+      icon: new Icon(Icons.perm_contact_calendar),
+      onPressed: ()=>_addToGoogleCalendars(),
     );
   }
 
@@ -230,6 +246,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
             child: new Column(
               children: [
                 _favouriteButton,
+                _calendarbutton
               ]
             )
           ),
