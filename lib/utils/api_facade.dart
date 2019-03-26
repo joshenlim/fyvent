@@ -3,6 +3,8 @@ import 'package:fyvent/utils/api/bank_api.dart' as bankAPI;
 import 'package:fyvent/utils/api/carpark_api.dart' as carparkAPI;
 import 'package:fyvent/utils/api/event_api.dart' as eventAPI;
 
+/// do not call this methods from the APIs directly;
+/// call methods from this file instead
 Future<List> getBankLocations(String bankName) async =>
     bankAPI.getBankLocations(bankName);
 
