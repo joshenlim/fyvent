@@ -19,6 +19,7 @@ class UpcomingEventsScreen extends StatefulWidget {
 
 class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
   List<Event> _eventList = List<Event>();
+  List _categoriesList = List();
 
   @override
   void initState() {
@@ -26,6 +27,11 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
     getEvents(10).then((res) {
       setState(() {
         _eventList = res;
+      });
+    });
+    getCategories().then((res) {
+      setState(() {
+        _categoriesList = res;
       });
     });
   }
@@ -60,7 +66,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
           onPressed: () {
               showSearch(
                 context: context, 
-                delegate: EventSearch()
+                delegate: EventSearch(categories: _categoriesList)
               );
           },
         )
