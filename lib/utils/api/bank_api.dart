@@ -1,6 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+/// do not call this methods from this file;
+/// call methods from api_facade instead
+
 Future<List> getBankLocations(String bankName) async {
   List listOfBanks = [];
   final requestURL =
