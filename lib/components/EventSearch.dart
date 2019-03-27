@@ -22,6 +22,13 @@ class EventSearch extends SearchDelegate<String> {
     }
   ];
 
+  /// for testing only; do not use anywhere else
+  List<Event> get getSearchEvents
+  => _searchEvents;
+
+  /// end of testing stuff
+
+
   @override
   List<Widget> buildActions(BuildContext context) {
     TextStyle optionTextStyle = new TextStyle(fontSize: 16.0, color: Colors.black);
