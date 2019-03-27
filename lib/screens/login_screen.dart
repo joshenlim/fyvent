@@ -113,7 +113,8 @@ class LoginScreenState extends State<LoginScreen>
       });
       container.logIn().then((res) async {
         if (res) {
-          PermissionStatus permissionStatus = await PermissionHandler().checkPermissionStatus(PermissionGroup.location);
+          PermissionStatus permissionStatus = await PermissionHandler().
+            checkPermissionStatus(PermissionGroup.location);
           if (permissionStatus ==PermissionStatus.denied) {
             List<PermissionGroup> permissions = <PermissionGroup>[PermissionGroup.location];
             await PermissionHandler().requestPermissions(permissions);
