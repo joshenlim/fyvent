@@ -1,24 +1,43 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:fyvent/components/EventFilter.dart';
 import 'package:fyvent/models/event.dart';
 import 'package:fyvent/components/EventCard.dart';
 import 'package:fyvent/utils/api_facade.dart';
 
 class EventSearch extends SearchDelegate<String> {
-  //StatefulWidget with
-
-  List<Event> _searchEvents = List<Event>();
   @override
   List<Widget> buildActions(BuildContext context) {
+    void _showFilterOptions() {
+      showModalBottomSheet<void>(context: context,
+        builder: (BuildContext context) {
+          return new Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              new ListTile(
+                leading: new Icon(Icons.music_note),
+                title: new Text('Music'),
+                onTap: () => {},          
+              ),
+              new ListTile(
+                leading: new Icon(Icons.photo_album),
+                title: new Text('Photos'),
+                onTap: () => {},          
+              ),
+              new ListTile(
+                leading: new Icon(Icons.videocam),
+                title: new Text('Video'),
+                onTap: () => {},          
+              ),
+            ],
+          );
+      });
+    }
     return [
       IconButton(
-          icon: Icon(Icons.filter_list),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => EventFilter(),
-            ));
-            print("You pressed Filter");
-          }),
+        icon: Icon(Icons.filter_list),
+        onPressed: () => _showFilterOptions(),
+      ),
       IconButton(
         icon: Icon(Icons.clear),
         onPressed: () {
@@ -43,87 +62,76 @@ class EventSearch extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    return Container();
+    var width = MediaQuery.of(context).size.width;
+    if (query.length == 0) {
+      return Container(
+        width: width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            new Icon(
+              Icons.search,
+              size: 50.0,
+              color: Colors.black26,
+            ),
+            new Padding(padding: const EdgeInsets.only(top: 10.0)),
+            new Text(
+              "Search for related events.",
+              style: new TextStyle(fontSize: 16.0, color: Colors.black26),
+            )
+          ]
+        )
+      );
+    }
+    return FutureBuilder<List<Event>>(
+      future: searchEvents(query),
+      builder: (BuildContext context, AsyncSnapshot<List<Event>> events) {
+        if(events.connectionState == ConnectionState.waiting) {
+          return Container(
+            width: width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                new CircularProgressIndicator(),
+              ]
+            )
+          );
+        }
+        if (!events.hasData || events.data.length == 0) {
+          return Container(
+            width: width,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                new Text(
+                  "Sorry, there are no events related to your search!",
+                  style: new TextStyle(fontSize: 16.0, color: Colors.black26),
+                )
+              ]
+            )
+          );
+        }
+        return buildEventSuggestions(events.data);
+      }
+    );
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    searchEvents(query).then((res) {
-      _searchEvents = res;
-    });
+    return buildResults(context);
+  }
 
+  Widget buildEventSuggestions(List<Event> events) {
     return ListView.builder(
-      itemCount: _searchEvents.length,
+      itemCount: events.length,
       itemBuilder: (context, index) {
-        return EventCard(event: _searchEvents[index]);
+        return EventCard(
+          event: events[index]
+        );
       },
     );
   }
-
-  // @override
-  // State<StatefulWidget> createState() {
-  //   // TODO: implement createState
-  //   return _FavoriteCityState();
-  // }
 }
-
-// class _FavoriteCityState extends State<EventSearch>{
-//     String nameCity = "";
-//     var _currentItemSel = 'SGD';
-//     var _val;
-//     var _currencies = ['SGD', 'POUND"', 'USD'];
-//     //final _scaffoldkey = new GlobalKey<ScaffoldState>();
-//    // VoidCallback _showPersBtmCallBack;
-
-//    void _showModalSheet(){
-//     showModalBottomSheet(
-//       context: context,
-//       builder: (builder){
-//         return new Container(
-//           //height: 500.0,
-//           color: Colors.blueAccent,
-//           child: new Center(
-//             child: Container(
-//               child: Column(
-//                 children: <Widget>[
-//                    DropdownButton<String>(
-//                     items: _currencies.map((String dropDownStringItem){
-//                       return DropdownMenuItem<String>(
-//                         value:dropDownStringItem,
-//                         child: Text(dropDownStringItem),
-//                       );
-//                     }).toList(),
-
-//                     onChanged: (String newValueSelected){
-//                       setState(() {
-
-//                       this._currentItemSel = newValueSelected;
-//                       print("selected: $newValueSelected");
-//                       _val = newValueSelected;
-//                       });
-//                     },
-
-//                     value: _currentItemSel,
-
-//                   ),
-//                   Padding(
-//                     padding: EdgeInsets.all(30.0),
-//                     child: Text("Your best city is $_val",
-//                     style:  TextStyle(fontSize: 20.0),)
-//                   )
-
-//                 ],
-//               ),
-
-//             )
-//           ),
-//         );
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // TODO: implement build
-//     return null;
-//   }
-// }
