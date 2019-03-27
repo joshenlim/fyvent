@@ -1,6 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+/// do not call this methods from this file;
+/// call methods from api_facade instead
+
 final accountKey = "II2mAyMiRWy0o4L/jVwzzQ==";
 
 Future<List> getCarparkLocations() async {

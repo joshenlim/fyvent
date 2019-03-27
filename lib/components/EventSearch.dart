@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyvent/models/event.dart';
-import 'package:fyvent/utils/event_services.dart';
 import 'package:fyvent/components/EventCard.dart';
+import 'package:fyvent/utils/api_facade.dart';
 
 class EventSearch extends SearchDelegate<String> {
 

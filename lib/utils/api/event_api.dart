@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:fyvent/models/event.dart';
 import 'package:http/http.dart' as http;
 
+/// do not call this methods from this file;
+/// call methods from api_facade instead
+
 final String _apiUrl = "http://api.eventfinda.sg/v2/events.json";
 final String username = 'sghangout';
 final String password = 'vnzsm5kssg56';
