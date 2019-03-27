@@ -17,6 +17,9 @@ Future<List<Event>> getEvents(int qty) async =>
 Future<List<Event>> searchEvents(String query) async =>
     eventAPI.searchEvents(query);
 
+Future<List<String>> getCategories() async =>
+    eventAPI.getCategories();
+
 bool checkIfEventInFavourites(List favourites, int id) =>
     eventAPI.checkIfEventInFavourites(favourites, id);
 

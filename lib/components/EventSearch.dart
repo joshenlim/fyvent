@@ -1,34 +1,47 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:fyvent/components/EventFilter.dart';
 import 'package:fyvent/models/event.dart';
 import 'package:fyvent/components/EventCard.dart';
 import 'package:fyvent/utils/api_facade.dart';
+import 'package:fyvent/components/DropdownOption.dart';
 
 class EventSearch extends SearchDelegate<String> {
+  final List<String> categories;
+  EventSearch({this.categories});
+  String selectedCategory = "All Events";
+
+  List<String> pricing = ["< \$10", "\$10 ~ \$60", "> \$60"];
+
   @override
   List<Widget> buildActions(BuildContext context) {
+    TextStyle optionTextStyle = new TextStyle(fontSize: 16.0, color: Colors.black);
     void _showFilterOptions() {
       showModalBottomSheet<void>(context: context,
         builder: (BuildContext context) {
           return new Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              new ListTile(
-                leading: new Icon(Icons.music_note),
-                title: new Text('Music'),
-                onTap: () => {},          
+              new Container(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
+                child: new Text("Filter events by:"),
               ),
               new ListTile(
-                leading: new Icon(Icons.photo_album),
-                title: new Text('Photos'),
-                onTap: () => {},          
+                leading: new Icon(Icons.category),
+                title: new Text(
+                  'Category',
+                  style: optionTextStyle,
+                ),
+                trailing: DropdownOption(options: categories)  
               ),
               new ListTile(
-                leading: new Icon(Icons.videocam),
-                title: new Text('Video'),
-                onTap: () => {},          
+                leading: new Icon(Icons.attach_money),
+                title: new Text(
+                  'Pricing',
+                  style: optionTextStyle,
+                ),
+                trailing: DropdownOption(options: pricing)         
               ),
+              new Padding(padding: const EdgeInsets.only(bottom: 10.0))
             ],
           );
       });
