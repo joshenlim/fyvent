@@ -7,6 +7,13 @@ class EventSearch extends SearchDelegate<String> {
 
   List<Event> _searchEvents = List<Event>();
 
+  /// for testing only; do not use anywhere else
+  List<Event> get getSearchEvents
+  => _searchEvents;
+
+  /// end of testing stuff
+
+
   @override
   List<Widget> buildActions(BuildContext context) {
      return [
