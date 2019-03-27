@@ -22,12 +22,15 @@ List<Event> eventsFromJson(String str) {
   return eventList;
 }
 
-List<String> categoriesFromJson(String str) {
-  List<String> categoryList = List<String>();
+List categoriesFromJson(String str) {
+  List categoryList = List();
   final jsonData = json.decode(str);
 
   jsonData["categories"].forEach((category) {
-    categoryList.add(category["name"]);
+    categoryList.add({
+      "id"  : category["id"],
+      "name": category["name"],
+    });
   });
 
   return categoryList;
@@ -43,6 +46,14 @@ Future<List<Event>> getEvents(int qty) async {
   return eventsFromJson(response.body);
 }
 
+Future<List<Event>> searchEventsByCategory(int catId, String query) async {
+  final response = await http.get('$_apiUrl/events.json?q=$query&category=$catId',
+    headers: {
+      'authorization' : basicAuth
+    });
+  return eventsFromJson(response.body);
+}
+
 Future<List<Event>> searchEvents(String query) async {
   final response = await http.get('$_apiUrl/events.json?q=$query',
     headers: {
@@ -51,7 +62,7 @@ Future<List<Event>> searchEvents(String query) async {
   return eventsFromJson(response.body);
 }
 
-Future<List<String>> getCategories() async {
+Future<List> getCategories() async {
   final response = await http.get('$_apiUrl/categories.json',
     headers: {
       'authorization' : basicAuth

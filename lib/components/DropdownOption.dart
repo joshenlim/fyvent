@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DropdownOption extends StatefulWidget {
-  final List<String> options;
+  final List options;
   DropdownOption({Key key, @required this.options}) : super(key: key);
 
   @override
@@ -9,8 +9,8 @@ class DropdownOption extends StatefulWidget {
 }
 
 class DropdownOptionState extends State<DropdownOption> {
-  List<String> options = [];
-  String activeOption = "";
+  List options = [];
+  Map activeOption = {};
 
   @override
   void initState() {
@@ -21,11 +21,11 @@ class DropdownOptionState extends State<DropdownOption> {
 
   @override
   Widget build(BuildContext context) {
-    return new DropdownButton<String>(
-      items: options.map((String value) {
-        return new DropdownMenuItem<String>(
-          value: value,
-          child: new Text(value),
+    return new DropdownButton(
+      items: options.map((option) {
+        return new DropdownMenuItem(
+          value: option,
+          child: new Text(option["name"]),
         );
       }).toList(),
       value: activeOption,

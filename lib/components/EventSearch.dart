@@ -5,11 +5,22 @@ import 'package:fyvent/utils/api_facade.dart';
 import 'package:fyvent/components/DropdownOption.dart';
 
 class EventSearch extends SearchDelegate<String> {
-  final List<String> categories;
+  final List categories;
   EventSearch({this.categories});
   String selectedCategory = "All Events";
 
-  List<String> pricing = ["< \$10", "\$10 ~ \$60", "> \$60"];
+  List pricing = [
+    {
+      "id": 1,
+      "name": "< \$10"
+    }, {
+      "id": 2,
+      "name": "\$10 ~ \$60"
+    }, {
+      "id": 3,
+      "name": "> \$60"
+    }
+  ];
 
   @override
   List<Widget> buildActions(BuildContext context) {

@@ -19,7 +19,7 @@ class UpcomingEventsScreen extends StatefulWidget {
 
 class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
   List<Event> _eventList = List<Event>();
-  List<String> _categoriesList = List<String>();
+  List _categoriesList = List();
 
   @override
   void initState() {
