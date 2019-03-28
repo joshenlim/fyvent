@@ -37,8 +37,7 @@ List categoriesFromJson(String str) {
 }
 
 Future<List<Event>> getEvents(int qty) async {
-  DateTime dt =DateTime.now();
-  final response = await http.get('$_apiUrl/events.json?rows=$qty&start_date=$dt',
+  final response = await http.get('$_apiUrl/events.json?rows=$qty',
     headers: {
       'authorization' : basicAuth
     }

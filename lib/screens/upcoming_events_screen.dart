@@ -24,7 +24,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
   @override
   void initState() {
     super.initState();
-    getEvents(10).then((res) {
+    getEvents(20).then((res) {
       setState(() {
         _eventList = res;
       });
@@ -36,14 +36,12 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
     });
   }
 
-  Future<Null> refreshList() async{
-    await Future.delayed(Duration(seconds: 2));
-    getEvents(10).then((res) {
+  Future<void> refreshList() async{
+    getEvents(20).then((res) {
       setState(() {
         _eventList = res;
       });
     });
-    return null;
   }
   
   Widget build(BuildContext context) {
@@ -80,13 +78,6 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
         child: _eventList.length != 0 ? new ListView.builder(
           itemCount: _eventList.length + 2,
           itemBuilder: (context, index) {
-            /*if (index >= _eventList.length - 3) {
-              getEvents(5).then((res) {
-                _eventList.addAll(res);
-              });
-              // Next up: How to load events which are not already shown on the screen
-              // Have to look into the api
-            }*/
             if (index == 0) {
               return FeaturedEventCard(
                 imgUrl: firebaseStorageUrl + "featured.jpg?alt=media&token=e68a1975-50ca-42c3-b38a-6ac587b8fbd0",
