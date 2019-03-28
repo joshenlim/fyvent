@@ -13,12 +13,17 @@ class EventCard extends StatelessWidget {
     String category   = event.getCategory();
 
     var width = MediaQuery.of(context).size.width;
-    final cardDescStyle = new TextStyle(color: Colors.white, fontFamily: 'Roboto', fontWeight: FontWeight.w300, fontSize: 14.0);
-    final boxShadowOverlayHeight = title.length > 27 ? 96.0 : 80.0;
+    final cardDescStyle = new TextStyle(
+      color: Colors.white,
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w300,
+      fontSize: 14.0
+    );
+
+    final boxShadowOverlayHeight = title.length > 27 ? 100.0 : 80.0;
 
     if (title.length > 47) title = title.substring(0, 47) + "...";
 
-    // Possibly move this into a screen manager, but must have context
     void _showEventDetail() {
       Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) => EventDetailScreen(event: event)
@@ -26,13 +31,13 @@ class EventCard extends StatelessWidget {
     }
 
     return new Container(
-      height: 200,
+      height: 220,
       width: width,
       margin: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
       child: new Stack(
         children: [
           new Container(
-            height: 200,
+            height: 220,
             decoration: new BoxDecoration(
               boxShadow: [
                 new BoxShadow(

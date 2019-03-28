@@ -6,25 +6,38 @@ import 'package:http/http.dart' as http;
 /// do not call this methods from this file;
 /// call methods from api_facade instead
 
-final String _apiUrl = "http://api.eventfinda.sg/v2/events.json";
+final String _apiUrl = "http://api.eventfinda.sg/v2";
 final String username = 'sghangout';
 final String password = 'vnzsm5kssg56';
 final String basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
 
 List<Event> eventsFromJson(String str) {
-    List<Event> eventList = List<Event>();  
-    final jsonData = json.decode(str);
+  List<Event> eventList = List<Event>();  
+  final jsonData = json.decode(str);
 
-    jsonData['events'].forEach((event) {
-      eventList.add(Event.fromJson(event));
-    });
+  jsonData['events'].forEach((event) {
+    eventList.add(Event.fromJson(event));
+  });
 
-    return eventList;
+  return eventList;
 }
 
-Future<List<Event>> getEvents(int qty) async{
-  DateTime dt =DateTime.now();
-  final response = await http.get('$_apiUrl?rows=$qty&start_date=$dt',
+List categoriesFromJson(String str) {
+  List categoryList = List();
+  final jsonData = json.decode(str);
+
+  jsonData["categories"].forEach((category) {
+    categoryList.add({
+      "id"  : category["id"],
+      "name": category["name"],
+    });
+  });
+
+  return categoryList;
+}
+
+Future<List<Event>> getEvents(int qty) async {
+  final response = await http.get('$_apiUrl/events.json?rows=$qty',
     headers: {
       'authorization' : basicAuth
     }
@@ -32,13 +45,29 @@ Future<List<Event>> getEvents(int qty) async{
   return eventsFromJson(response.body);
 }
 
-Future<List<Event>> searchEvents(String query) async{
-  await Future.delayed(Duration(seconds: 1));
-  final response = await http.get('$_apiUrl?q=$query',
+Future<List<Event>> searchEventsByCategory(int catId, String query) async {
+  final response = await http.get('$_apiUrl/events.json?q=$query&category=$catId',
     headers: {
       'authorization' : basicAuth
     });
   return eventsFromJson(response.body);
+}
+
+Future<List<Event>> searchEvents(String query) async {
+  final response = await http.get('$_apiUrl/events.json?q=$query',
+    headers: {
+      'authorization' : basicAuth
+    });
+  return eventsFromJson(response.body);
+}
+
+Future<List> getCategories() async {
+  final response = await http.get('$_apiUrl/categories.json',
+    headers: {
+      'authorization' : basicAuth
+    });
+  return categoriesFromJson(response.body);
+  
 }
 
 bool checkIfEventInFavourites(List favourites, int id) {
