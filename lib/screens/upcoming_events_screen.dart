@@ -78,7 +78,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
       child: new RefreshIndicator(
         onRefresh: refreshList,
         child: _eventList.length != 0 ? new ListView.builder(
-          itemCount: _eventList.length,
+          itemCount: _eventList.length + 2,
           itemBuilder: (context, index) {
             /*if (index >= _eventList.length - 3) {
               getEvents(5).then((res) {
