@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fyvent/app_state_container.dart';
 import 'package:fyvent/screens/favourites_screen.dart';
+import 'package:fyvent/screens/search_nearby_screen.dart';
 
 class SideMenu extends StatelessWidget {
   final String name;
@@ -23,6 +24,13 @@ class SideMenu extends StatelessWidget {
       Navigator.of(context).pop();
       Navigator.of(context).push(MaterialPageRoute<void>(
         builder: (BuildContext context) => FavouritesScreen()
+      ));
+    }
+
+    void _searchNearby(){
+      Navigator.of(context).pop(); //the back button
+      Navigator.of(context).push(MaterialPageRoute<void>(
+        builder: (BuildContext context) => SearchNearbyScreen()
       ));
     }
 
@@ -60,7 +68,7 @@ class SideMenu extends StatelessWidget {
           ListTile(
             title: Text("Search Nearby"),
             leading: Icon(Icons.search),
-            onTap: () {print("Search");},
+            onTap: () => _searchNearby(),
           ),
           ListTile(
             title: Text("Favourites"),
