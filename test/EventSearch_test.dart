@@ -6,9 +6,10 @@ import 'package:fyvent/utils/api_facade.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 
-/// reference
 /// control class that is being tested: EventSearch
-/// package:fyvent/screens/upcoming_events_screen.dart
+/// method used: black-box testing
+/// 
+/// reference
 /// https://github.com/flutter/flutter/blob/master/packages/flutter/test/material/search_test.dart
 ///
 /// main() runs the tests
