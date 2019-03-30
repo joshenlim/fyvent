@@ -1,110 +1,184 @@
 import 'package:fyvent/components/EventSearch.dart';
 import 'package:fyvent/components/EventCard.dart';
+//import 'package:fyvent/screens/upcoming_events_screen.dart';
+import 'package:fyvent/models/event.dart';
+import 'package:fyvent/utils/api_facade.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 
 /// reference
+/// package:fyvent/screens/upcoming_events_screen.dart
 /// https://github.com/flutter/flutter/blob/master/packages/flutter/test/material/search_test.dart
 void main()
 {
-    testWidgets('Requests suggestions', (WidgetTester tester) async {
-        EventSearch delegate = new EventSearch();
+    testWidgets('check required widgets exist', (WidgetTester tester) async {
 
-        await tester.pumpWidget(TestHomePage(
-            delegate: delegate,
-            ));
-        await tester.tap(find.byTooltip('Search'));
-        await tester.pumpAndSettle();
+        TestEventSearch eventSearchDelegate = new TestEventSearch();
 
-        //expect(delegate.query, '');
-        //expect(delegate.querysForSuggestions.last, '');
-        //expect(delegate.querysForResults, hasLength(0));
+        await tester.pumpWidget(new MaterialApp(home: TestHomePage(eventSearchDelegate)));
 
-        // Type W o w into search field
-        //delegate.querysForSuggestions.clear();
-//        await tester.enterText(find.byType(TextField), 'W');
-//        await tester.pumpAndSettle();
-//        expect(delegate.query, 'W');
-//        await tester.enterText(find.byType(TextField), 'Wo');
-//        await tester.pumpAndSettle();
-//        expect(delegate.query, 'Wo');
-        await tester.enterText(find.byType(TextField), 'Wow');
-        await tester.pumpAndSettle();
-        expect(delegate.query, 'Wow');
+        // check AppBar exists
+        expect(find.byType(AppBar), findsOneWidget);
 
-        //expect(delegate.querysForSuggestions, <String>['W', 'Wo', 'Wow']);
-        //expect(delegate.querysForResults, hasLength(0));
+        // check search button exists
+        expect(find.widgetWithIcon(IconButton, Icons.search), findsOneWidget);
+
+        // check that no event is found when no query is typed in yet
+        expect(find.text('No event found'), findsOneWidget);
+
     });
 
-//    testWidgets('query in title or desc of every events', (WidgetTester tester) async {
-//
-//        EventSearch eventSearchDelegate = new EventSearch();
-//
-//        final List<String> selectedResults = <String>[];
-//
-//        await tester.pumpWidget(TestHomePage(
-//            delegate: eventSearchDelegate,
-//            results: selectedResults,
-//            passInInitialQuery: true,
-//            initialQuery: 'student',
-//        ));
-//
-//        await tester.tap(find.byTooltip('Search'));
-//        await tester.pumpAndSettle();
-//
-//        expect(find.byWidgetPredicate(
-//                (Widget widget) => widget is EventCard,
-//            description: 'event card with title or description containing the string "student"',
-//                ), findsOneWidget);
-//    });
+    testWidgets('check tapping search button works', (WidgetTester tester) async {
+
+        TestEventSearch eventSearchDelegate = new TestEventSearch();
+
+        await tester.pumpWidget(new MaterialApp(home: TestHomePage(eventSearchDelegate)));
+
+        // tap on the search button (proved to exist based on previous test)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        // search button has been tapped
+
+        // check search button does not exist
+        expect(find.widgetWithIcon(IconButton, Icons.search), findsNothing);
+
+        // check filter event button button exists
+        expect(find.widgetWithIcon(IconButton, Icons.filter_list), findsOneWidget);
+
+        // check textfield for entering query exists
+        expect(find.byType(TextField), findsOneWidget);
+    });
+
+    testWidgets('check querying works', (WidgetTester tester) async {
+
+        TestEventSearch eventSearchDelegate = new TestEventSearch();
+
+        await tester.pumpWidget(new MaterialApp(home: TestHomePage(eventSearchDelegate)));
+
+        // tap on the search button (proved to exist based on previous test)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        // search button has been tapped
+
+        // type a query into the textfield (proved to exist based on previous test)
+        await tester.enterText(find.byType(TextField), 'Test');
+        await tester.pump();
+
+        // check that query matches whatever is entered into textfield
+        expect(eventSearchDelegate.query, 'Test');
+    });
+
+    testWidgets('check querying return correct events',
+                        (WidgetTester tester) async {
+
+        await tester.runAsync(() async {
+
+            TestEventSearch eventSearchDelegate = new TestEventSearch();
+
+            await tester.pumpWidget(new MaterialApp(home: TestHomePage(eventSearchDelegate)));
+
+            // tap on the search button (proved to exist based on previous test)
+            await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+            await tester.pumpAndSettle();
+
+            // search button has been tapped
+
+            // type a query into the textfield (proved to exist based on previous test)
+            await tester.enterText(find.byType(TextField), 'a');
+            await tester.pumpAndSettle(new Duration(seconds: 10));
+
+            // check that query matches whatever is entered into textfield
+            expect(eventSearchDelegate.query, 'a');
+            print('query: ' + eventSearchDelegate.query);
+
+            // works up to here
+
+            print('About to get events...');
+            await eventSearchDelegate.refreshList(); // this line does not make it work either
+            print('updated eventSearchDelegate list of events');
+
+            //expect(eventSearchDelegate._eventList.length > 0, isTrue);
+            List<Event> eventList = await searchEvents('a');
+            // expect(eventList.length > 0, isTrue);
+            if (eventList.length == 0) {
+                print('search event failed');
+            }
+
+            expect(eventList.length > 0, isTrue);
+
+            // expect(find.byType(RefreshIndicator), findsOneWidget);
+        });
+
+    });
 }
 
 class TestHomePage extends StatelessWidget {
-    const TestHomePage({
-                           this.results,
-                           this.delegate,
-                           this.passInInitialQuery = false,
-                           this.initialQuery,
-                       });
 
-    final List<String> results;
-    final SearchDelegate<String> delegate;
-    final bool passInInitialQuery;
-    final String initialQuery;
+    final TestEventSearch eventSearchDelegate;
 
-    @override
+    TestHomePage(this.eventSearchDelegate);
+
+    //@override
     Widget build(BuildContext context) {
-        return MaterialApp(
-            home: Builder(builder: (BuildContext context) {
-                return Scaffold(
-                    appBar: AppBar(
-                        title: const Text('HomeTitle'),
-                        actions: <Widget>[
-                            IconButton(
-                                tooltip: 'Search',
-                                icon: const Icon(Icons.search),
-                                onPressed: () async {
-                                    String selectedResult;
-                                    if (passInInitialQuery) {
-                                        selectedResult = await showSearch<String>(
-                                            context: context,
-                                            delegate: delegate,
-                                            query: initialQuery,
-                                            );
-                                    } else {
-                                        selectedResult = await showSearch<String>(
-                                            context: context,
-                                            delegate: delegate,
-                                            );
-                                    }
-                                    results?.add(selectedResult);
-                                },
-                                ),
-                        ],
-                        ),
-                    body: const Text('HomeBody'),
-                    );
-            }),
+
+        var width = MediaQuery.of(context).size.width;
+
+        Widget _appBar = new AppBar(
+            title: new Text('Search Test'),
+            actions: [
+                new IconButton(
+                    icon: const Icon(Icons.search),
+                    onPressed: () =>
+                        showSearch(
+                            context: context,
+                            delegate: eventSearchDelegate,
+                            )
+                    ),
+            ],
             );
+
+        Widget body = new Container(
+            width: width,
+            child: new RefreshIndicator(
+                onRefresh: eventSearchDelegate.refreshList,
+                child: eventSearchDelegate._eventList.length != 0 ? new ListView.builder(
+                    itemCount: eventSearchDelegate._eventList.length + 2,
+                    itemBuilder: (context, index) {
+                            return EventCard(event: eventSearchDelegate._eventList[index - 2]);
+                    },
+                    ) : new Center(
+                    child: Text('No event found'),
+                        ),
+                    )
+            );
+
+        return new Scaffold(
+            appBar: _appBar,
+            body: Stack(
+                children: <Widget>[
+                    body,
+                ],
+                ),
+            );
+    }
+}
+
+class TestEventSearch extends EventSearch {
+
+    List<Event> _eventList = List<Event>();
+
+    Future<void> refreshList() async{
+        print('Getting events...');
+//        _eventList = await getEvents(20);
+        getEvents(20).then((response) {
+            _eventList = response;
+        });
+        print('Updated event list');
+
+        for(Event event in _eventList)
+            print(event.name);
     }
 }

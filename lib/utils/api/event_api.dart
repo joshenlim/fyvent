@@ -13,18 +13,17 @@ final String basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$passwor
 
 List<Event> eventsFromJson(String str) {
   List<Event> eventList = List<Event>();
-  try
-  {
+
+  try {
       final jsonData = json.decode(str);
 
       jsonData['events'].forEach((event) {
           eventList.add(Event.fromJson(event));
       });
   }
-  catch (exception)
-    {
-        print(exception.toString());
-    }
+  catch (exception) {
+        print('exception from eventsFromJson(): ' + exception.toString());
+  }
 
   return eventList;
 }
@@ -32,8 +31,7 @@ List<Event> eventsFromJson(String str) {
 List categoriesFromJson(String str) {
   List categoryList = List();
 
-  try
-  {
+  try {
       final jsonData = json.decode(str);
 
       jsonData["categories"].forEach((category) {
@@ -43,10 +41,9 @@ List categoriesFromJson(String str) {
                            });
       });
   }
-  catch (exception)
-    {
-        print(exception.toString());
-    }
+  catch (exception) {
+        print(' exception from categoriesFromJson()' + exception.toString());
+  }
 
   return categoryList;
 }
@@ -69,10 +66,24 @@ Future<List<Event>> searchEventsByCategory(int catId, String query) async {
 }
 
 Future<List<Event>> searchEvents(String query) async {
-  final response = await http.get('$_apiUrl/events.json?q=$query',
+
+    print('$_apiUrl/events.json?q=$query');
+    print('authorization: $basicAuth');
+
+    print('Searching for events based on "$query" ...');
+    final response = await http.get('$_apiUrl/events.json?q=$query',
     headers: {
       'authorization' : basicAuth
     });
+    print('Got response from http request');
+
+    final statusCode = response.statusCode;
+    print('response status: $statusCode');
+
+    for(Event event in eventsFromJson(response.body)) {
+        print(event.name);
+    }
+
   return eventsFromJson(response.body);
 }
 

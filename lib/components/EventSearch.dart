@@ -85,6 +85,11 @@ class EventSearch extends SearchDelegate<String> {
   }
 
   @override
+  Widget buildSuggestions(BuildContext context) {
+      return buildResults(context);
+  }
+
+  @override
   Widget buildResults(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     if (query.length == 0) {
@@ -141,11 +146,6 @@ class EventSearch extends SearchDelegate<String> {
         return buildEventSuggestions(events.data);
       }
     );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return buildResults(context);
   }
 
   Widget buildEventSuggestions(List<Event> events) {

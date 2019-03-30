@@ -1,6 +1,8 @@
 import 'package:fyvent/components/EventSearch.dart';
 import 'package:test/test.dart';
 
+// placeholder
+// gotta wait till search event filter by category is implemented
 void main()
 {
     EventSearch eventSearcher = new EventSearch();
@@ -15,7 +17,7 @@ void main()
             // eventSearcher.constructQuery('Business & Education');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Business & Education');
             }
@@ -27,7 +29,7 @@ void main()
             // eventSearcher.constructQuery('Business & Educatiol');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Business & Education');
             }
@@ -42,7 +44,7 @@ void main()
             // eventSearcher.constructQuery('Exhibitions');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Exhibitions');
             }
@@ -54,7 +56,7 @@ void main()
             // eventSearcher.constructQuery('Exhibition');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Exhibitions');
             }
@@ -69,7 +71,7 @@ void main()
             // eventSearcher.constructQuery('Performing Arts');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Performing Arts');
             }
@@ -81,7 +83,7 @@ void main()
             // eventSearcher.constructQuery('Performing Art1');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Performing Arts');
             }
@@ -96,7 +98,7 @@ void main()
             // eventSearcher.constructQuery('Concerts & Gig');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Concerts & Gig');
             }
@@ -108,7 +110,7 @@ void main()
             // eventSearcher.constructQuery('Business & Education');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Concerts & Gig');
             }
@@ -123,7 +125,7 @@ void main()
             // eventSearcher.constructQuery('Festivals & Lifestyle');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Festivals & Lifestyle');
             }
@@ -135,7 +137,7 @@ void main()
             // eventSearcher.constructQuery('Festival & Lifestyle');
             eventSearcher.noSuchMethod(null);
 
-            for(var event in eventSearcher.getSearchEvents)
+            for(var event in eventSearcher.noSuchMethod(null)) // get events
             {
                 expect(event.category, 'Festivals & Lifestyle');
             }
