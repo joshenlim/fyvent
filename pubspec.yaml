@@ -18,7 +18,7 @@ dependencies:
   permission_handler: ^2.2.0
   flutter_spinkit: "^3.1.0"
   location: ^2.1.0
-  
+  geocoder: ^0.1.2
 
 dev_dependencies:
   flutter_launcher_icons: ^0.7.0
@@ -44,3 +44,7 @@ flutter:
     - assets/images/logo-dark.png
     - assets/images/logo-color.png
     - assets/images/google-logo.png
+    - assets/icons/dbs-logo.png
+    - assets/icons/uob-logo.png
+    - assets/icons/ocbc-logo.png
+    
