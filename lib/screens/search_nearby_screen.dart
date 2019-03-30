@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/services.dart';
 import 'package:fyvent/utils/api_facade.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:geocoder/geocoder.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SearchNearbyScreen extends StatefulWidget {
   @override
@@ -12,14 +14,12 @@ class SearchNearbyScreen extends StatefulWidget {
 }
 
 class SearchNearbyScreenState extends State<SearchNearbyScreen> {
-  /*Initialise variables*/
-  //Layout variables
   int _bottomNavBarIndex = 0;
-  bool _pressAttentionCP = false;
-  bool _pressAttentionATM = true;
-  int _mapViewIndex = 0; //view DBS ATM on map by default
-  //Google Map Markers variables
-  final Set<Map> markersSet = {};
+  bool _pressAttentionCP = true;
+  bool _pressAttentionATM = false;
+  int _mapViewIndex = 3;
+
+  final Set<Map> markersSet = new Set();
   Map<MarkerId, Marker> _markersDBS = <MarkerId, Marker>{};
   Map<MarkerId, Marker> _markersUOB = <MarkerId, Marker>{};
   Map<MarkerId, Marker> _markersOCBC = <MarkerId, Marker>{};
@@ -29,9 +29,60 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
   List dbsATM = List();
   List uobATM = List();
   List ocbcATM = List();
-  //Location variables
-  Location location = Location();
-  LocationData userLocation;
+ 
+  Location _locationService = new Location();
+  LocationData _currentLocation;
+  StreamSubscription<LocationData> _locationSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    initMarkerList();
+    loadMarkers();
+    initPlatformState();
+  }
+
+  void initPlatformState() async {
+    await _locationService.changeSettings(accuracy:LocationAccuracy.HIGH, interval: 1000);
+    LocationData _location;
+    try {
+      bool serviceStatus = await _locationService.serviceEnabled();
+      if (serviceStatus) {
+        bool _permission = await _locationService.hasPermission();
+        if (_permission) {
+          _location = await _locationService.getLocation();
+          _locationSubscription = _locationService.onLocationChanged().listen((LocationData res) {
+            if (mounted) {
+              print(res.toString());
+              setState(() {
+                _currentLocation = res;
+              });
+            }
+          });
+          setState(() {
+            _currentLocation = _location;
+          });
+        } else {
+          bool permissionStatusResult = await _locationService.requestPermission();
+          if (permissionStatusResult) {
+            initPlatformState();
+          }
+        }
+      } else {
+        bool serviceStatusResult = await _locationService.requestService();
+        if (serviceStatusResult) {
+          initPlatformState();
+        }
+      }
+    } on PlatformException catch (e) {
+      print(e);
+      if (e.code == 'PERMISSION_DENIED') {
+        print("Error: " + e.message);
+      } else if (e.code == 'SERVICE_STATUS_ERROR') {
+        print("Error: " + e.message);
+      }
+    }
+  }
 
   void initMarkerList() {
     //So that master list contain all four different Map of markers. Only one map of markers displayed each time.
@@ -56,19 +107,6 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
     carparks = await getCarparkLocations();
     _addCP();
     loadATMMarkers();
-  }
-
-  @override
-  void initState() {
-    initMarkerList();
-    super.initState();
-    loadMarkers();
-    location.onLocationChanged().listen((loc) {
-      setState(() {
-        userLocation = loc;
-        
-      });
-    });
   }
 
   void _addUserInputMarker(double latitude, double longitude) {
@@ -136,7 +174,6 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
                     "https://www.google.com/maps/dir/?api=1&destination=$destAddress" +
                         "&travelmode=driving";
                 if (await canLaunch(mapsUrl)) {
-                  // print('launching com googleUrl');
                   await launch(mapsUrl);
                 }
               }),
@@ -289,26 +326,33 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        _raisedButtonATM,
                         _raisedButtonCP,
+                        _raisedButtonATM,
                       ],
                     ),
                   ]),
             ),
-            Expanded(
+            _currentLocation != null ? Expanded(
               child: GoogleMap(
                   myLocationEnabled: true,
                   mapType: MapType.normal,
                   initialCameraPosition: CameraPosition(
                     target:
-                        LatLng(userLocation.latitude, userLocation.longitude),
-                    zoom: 17.214097324097,
+                        LatLng(_currentLocation.latitude, _currentLocation.longitude),
+                    zoom: 15,
                   ),
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                   },
                   markers: Set<Marker>.of(
                       markersSet.elementAt(_mapViewIndex).values)),
+            ) : new Expanded(
+              child: new Center(
+                child: SpinKitRipple(
+                  color: Colors.teal,
+                  size: 50.0,
+                )
+              ),
             )
           ],
         ),
