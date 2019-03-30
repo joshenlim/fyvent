@@ -12,26 +12,41 @@ final String password = 'vnzsm5kssg56';
 final String basicAuth = 'Basic ' + base64Encode(utf8.encode('$username:$password'));
 
 List<Event> eventsFromJson(String str) {
-  List<Event> eventList = List<Event>();  
-  final jsonData = json.decode(str);
+  List<Event> eventList = List<Event>();
+  try
+  {
+      final jsonData = json.decode(str);
 
-  jsonData['events'].forEach((event) {
-    eventList.add(Event.fromJson(event));
-  });
+      jsonData['events'].forEach((event) {
+          eventList.add(Event.fromJson(event));
+      });
+  }
+  catch (exception)
+    {
+        print(exception.toString());
+    }
 
   return eventList;
 }
 
 List categoriesFromJson(String str) {
   List categoryList = List();
-  final jsonData = json.decode(str);
 
-  jsonData["categories"].forEach((category) {
-    categoryList.add({
-      "id"  : category["id"],
-      "name": category["name"],
-    });
-  });
+  try
+  {
+      final jsonData = json.decode(str);
+
+      jsonData["categories"].forEach((category) {
+          categoryList.add({
+                               "id"  : category["id"],
+                               "name": category["name"],
+                           });
+      });
+  }
+  catch (exception)
+    {
+        print(exception.toString());
+    }
 
   return categoryList;
 }
