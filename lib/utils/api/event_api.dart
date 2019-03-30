@@ -66,24 +66,10 @@ Future<List<Event>> searchEventsByCategory(int catId, String query) async {
 }
 
 Future<List<Event>> searchEvents(String query) async {
-
-    print('$_apiUrl/events.json?q=$query');
-    print('authorization: $basicAuth');
-
-    print('Searching for events based on "$query" ...');
     final response = await http.get('$_apiUrl/events.json?q=$query',
     headers: {
       'authorization' : basicAuth
     });
-    print('Got response from http request');
-
-    final statusCode = response.statusCode;
-    print('response status: $statusCode');
-
-    for(Event event in eventsFromJson(response.body)) {
-        print(event.name);
-    }
-
   return eventsFromJson(response.body);
 }
 
