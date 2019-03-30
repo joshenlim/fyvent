@@ -2,8 +2,8 @@ import 'package:fyvent/components/EventSearch.dart';
 import 'package:test/test.dart';
 
 
-// placeholder
-// gotta wait till search event filter by category is implemented
+/// archived test
+/// event price is not going to be implemented
 void main()
 {
     EventSearch eventSearcher = new EventSearch();
@@ -14,7 +14,7 @@ void main()
                   {
                       eventSearcher.buildSuggestions(null);
 
-                      for(var event in eventSearcher.noSuchMethod(null)) // get events
+                      for(var event in eventSearcher.getSearchEvents)
                       {
                           var price = event.noSuchMethod(null); // getPrice()
 
@@ -26,7 +26,7 @@ void main()
                   {
                       eventSearcher.buildSuggestions(null);
 
-                      for(var event in eventSearcher.noSuchMethod(null)) // get events
+                      for(var event in eventSearcher.getSearchEvents)
                       {
                           var price = event.noSuchMethod(null); // getPrice()
 
@@ -38,7 +38,7 @@ void main()
                   {
                       eventSearcher.buildSuggestions(null);
 
-                      for(var event in eventSearcher.noSuchMethod(null)) // get events
+                      for(var event in eventSearcher.getSearchEvents)
                       {
                           var price = event.noSuchMethod(null); // getPrice()
 
@@ -50,7 +50,7 @@ void main()
                   {
                       eventSearcher.buildSuggestions(null);
 
-                      for(var event in eventSearcher.noSuchMethod(null)) // get events
+                      for(var event in eventSearcher.getSearchEvents)
                       {
                           var price = event.noSuchMethod(null); // getPrice()
 
