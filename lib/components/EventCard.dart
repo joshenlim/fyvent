@@ -57,7 +57,7 @@ class EventCard extends StatelessWidget {
                   alignment: Alignment.center,
                 ),
               ),
-            )
+            ),
           ),
           new Align(
             alignment: Alignment.bottomCenter,
