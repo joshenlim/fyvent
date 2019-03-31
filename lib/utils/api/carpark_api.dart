@@ -8,24 +8,28 @@ final accountKey = "II2mAyMiRWy0o4L/jVwzzQ==";
 
 Future<List> getCarparkLocations() async {
   List listOfCarparks = [];
-  final requestURL = "http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2";
+  final requestURL =
+      "http://datamall2.mytransport.sg/ltaodataservice/CarParkAvailabilityv2";
 
-  final response = await http.get(requestURL,
-    headers: {
-      'AccountKey' : accountKey  
-    }
-  );
+  final response =
+      await http.get(requestURL, headers: {'AccountKey': accountKey});
   if (response.statusCode == 200) {
     final responseJson = json.decode(response.body);
     responseJson["value"].forEach((carpark) {
       if (carpark["LotType"] == "C" || carpark["LotType"] == "M") {
-        List<String> latLng = carpark["Location"].split(" ");
-        listOfCarparks.add({
-          "address": carpark["Development"] + " (" + carpark["Area"] + ")",
-          "lat": latLng[0],
-          "lng": latLng[0],
-          "availableLots": carpark["AvailableLots"],
-        });
+        if (carpark["Location"].length > 0) {
+          List<String> latLng = carpark["Location"].split(" ");
+          // print(latLng.toString() + " : " + latLng.length.toString());
+          String carparkAddress = carpark["Area"].length > 0
+              ? carpark["Development"] + " (" + carpark["Area"] + ")"
+              : carpark["Development"];
+          listOfCarparks.add({
+            "address": carparkAddress,
+            "lat": latLng[0],
+            "lng": latLng[1],
+            "availableLots": carpark["AvailableLots"],
+          });
+        }
       }
     });
   } else {

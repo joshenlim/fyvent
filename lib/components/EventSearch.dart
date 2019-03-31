@@ -3,6 +3,7 @@ import 'package:fyvent/models/event.dart';
 import 'package:fyvent/components/EventCard.dart';
 import 'package:fyvent/utils/api_facade.dart';
 import 'package:fyvent/components/DropdownOption.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EventSearch extends SearchDelegate<String> {
   final List categories;
@@ -123,7 +124,12 @@ class EventSearch extends SearchDelegate<String> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                new CircularProgressIndicator(),
+                new Center(
+                  child: SpinKitRipple(
+                    color: Colors.teal,
+                    size: 50.0,
+                  )
+                )
               ]
             )
           );
