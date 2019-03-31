@@ -3,8 +3,9 @@ import 'package:fyvent/components/EventCard.dart';
 import 'package:fyvent/models/event.dart';
 import 'package:fyvent/utils/api_facade.dart';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:image_test_utils/image_test_utils.dart';
 
 /// control class that is being tested: EventSearch
 /// method used: black-box testing
@@ -202,6 +203,7 @@ void main()
     // check that results of api calls and whatever backend logic will be reflected on frontend
     group('check if events returned will be displayed', () {
         testWidgets('check that events can be displayed as ListView', (WidgetTester tester) async {
+
             TestEventSearch eventSearchDelegate = new TestEventSearch();
 
             List<Event> milestones = [
@@ -211,14 +213,6 @@ void main()
                     imgUrl: 'https://tineye.com/images/widgets/mona.jpg'),
                 Event(
                     name: 'graduation',
-                    category: 'Test',
-                    imgUrl: 'https://tineye.com/images/widgets/mona.jpg'),
-                Event(
-                    name: 'marriage',
-                    category: 'Test',
-                    imgUrl: 'https://tineye.com/images/widgets/mona.jpg'),
-                Event(
-                    name: 'promotion',
                     category: 'Test',
                     imgUrl: 'https://tineye.com/images/widgets/mona.jpg'),
                 Event(
@@ -232,12 +226,21 @@ void main()
             // events will be displayed as ListView
             expect(output is ListView, isTrue);
 
-            //await tester.pumpWidget(new MaterialApp(
-            //    home: TestDisplayEvents(output),
-            //));
+            await provideMockedNetworkImages(() async {
 
-            //expect(find.byType(ListView), findsWidgets);
-//            expect(find.byType(EventCard), findsNWidgets(5));
+                await tester.pumpWidget(
+                    new MaterialApp(
+                        home: TestDisplayEvents(output),
+                    ),
+                    );
+
+                expect(find.byType(ListView), findsWidgets);
+                expect(find.byType(EventCard), findsNWidgets(3));
+
+                expect(find.widgetWithText(EventCard, 'birthday'), findsOneWidget);
+                expect(find.widgetWithText(EventCard, 'graduation'), findsOneWidget);
+                expect(find.widgetWithText(EventCard, 'funeral'), findsOneWidget);
+            });
         });
     });
 }
@@ -252,7 +255,9 @@ class TestDisplayEvents extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
 
-        return eventListView;
+        return new Container(
+            child: eventListView,
+        );
     }
 }
 
