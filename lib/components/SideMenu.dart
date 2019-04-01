@@ -30,7 +30,7 @@ class SideMenu extends StatelessWidget {
     void _searchNearby(){
       Navigator.of(context).pop(); //the back button
       Navigator.of(context).push(MaterialPageRoute<void>(
-        builder: (BuildContext context) => SearchNearbyScreen()
+        builder: (BuildContext context) => SearchNearbyScreen(null, true)
       ));
     }
 
