@@ -24,12 +24,12 @@ Future<List> getBankLocations(String bankName) async {
         if (response.statusCode != 200)
             print('Error OneMap for page 1: ' + response.statusCode.toString());
         else {
-            var responseJson = json.decode(response.body);
+            var decodedResponse = json.decode(response.body);
 
             // get total number of pages from first response (first page)
-            final totalNumPages = responseJson['totalNumPages'];
+            final totalNumPages = decodedResponse['totalNumPages'];
 
-            _addJsonToBankList(responseJson, listOfBanks);
+            _addJsonToBankList(decodedResponse, listOfBanks);
 
             // hope this is faster than concatenating in loop below
             requestURL = requestURL + '&pageNum=';
@@ -38,12 +38,12 @@ Future<List> getBankLocations(String bankName) async {
             for(var pageNum = 2; pageNum <= totalNumPages; ++pageNum) {
 
                 response = await oneMap.get(requestURL + pageNum.toString());
-                responseJson = json.decode(response.body);
+                decodedResponse = json.decode(response.body);
 
                 if (response.statusCode != 200)
                     print('Error OneMap for page $pageNum: ' + response.statusCode.toString());
                 else {
-                    _addJsonToBankList(responseJson, listOfBanks);
+                    _addJsonToBankList(decodedResponse, listOfBanks);
                 }
             }
         }
@@ -57,9 +57,9 @@ Future<List> getBankLocations(String bankName) async {
     return listOfBanks;
 }
 
-void _addJsonToBankList(responseJson, List listOfBanks) {
+void _addJsonToBankList(decodedResponse, List listOfBanks) {
 
-    responseJson['results'].forEach((bankJson) {
+    decodedResponse['results'].forEach((bankJson) {
 
         listOfBanks.add({
                             'address': bankJson['BUILDING'] + ', ' + bankJson['ROAD_NAME'],
