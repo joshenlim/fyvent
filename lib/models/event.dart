@@ -1,4 +1,4 @@
-import 'package:fyvent/utils/convert.dart';
+import 'package:fyvent/utils/event_manager.dart';
 
 class Event {
   int    id;

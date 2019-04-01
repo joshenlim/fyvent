@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:async';
 import 'package:fyvent/models/user.dart';
 import 'package:fyvent/models/event.dart';
-import 'package:fyvent/utils/api_facade.dart';
+import 'package:fyvent/utils/event_manager.dart';
 
 class CloudFirestore {
 
