@@ -29,7 +29,7 @@ Future<List> getBankLocations(String bankName) async {
             // get total number of pages from first response (first page)
             final totalNumPages = decodedResponse['totalNumPages'];
 
-            _addJsonToBankList(decodedResponse, listOfBanks);
+            _addResponseToBankList(decodedResponse, listOfBanks);
 
             // hope this is faster than concatenating in loop below
             requestURL = requestURL + '&pageNum=';
@@ -43,7 +43,7 @@ Future<List> getBankLocations(String bankName) async {
                 if (response.statusCode != 200)
                     print('Error OneMap for page $pageNum: ' + response.statusCode.toString());
                 else {
-                    _addJsonToBankList(decodedResponse, listOfBanks);
+                    _addResponseToBankList(decodedResponse, listOfBanks);
                 }
             }
         }
@@ -57,7 +57,7 @@ Future<List> getBankLocations(String bankName) async {
     return listOfBanks;
 }
 
-void _addJsonToBankList(decodedResponse, List listOfBanks) {
+void _addResponseToBankList(Map decodedResponse, List listOfBanks) {
 
     decodedResponse['results'].forEach((bankJson) {
 
