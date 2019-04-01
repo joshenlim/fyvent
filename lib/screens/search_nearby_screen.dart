@@ -9,15 +9,22 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SearchNearbyScreen extends StatefulWidget {
+  final String eventAddress;
+  final bool ifCPATM; // 1 for CP, 0 for ATM
+  SearchNearbyScreen(this.eventAddress, this.ifCPATM);
+  // const SearchNearbyScreen({Key key, @required this.eventAddress, this.ifCPATM}) : super(key: key);
   @override
   SearchNearbyScreenState createState() => new SearchNearbyScreenState();
 }
 
 class SearchNearbyScreenState extends State<SearchNearbyScreen> {
   int _bottomNavBarIndex = 0;
-  bool _pressAttentionCP = true;
-  bool _pressAttentionATM = false;
-  int _mapViewIndex = 3;
+  // bool _pressAttentionCP = true;
+  // bool _pressAttentionATM = false;
+  // int _mapViewIndex = 3;
+  bool _pressAttentionCP;
+  bool _pressAttentionATM;
+  int _mapViewIndex;
 
   final Set<Map> markersSet = new Set();
   Map<MarkerId, Marker> _markersDBS = <MarkerId, Marker>{};
@@ -29,7 +36,7 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
   List dbsATM = List();
   List uobATM = List();
   List ocbcATM = List();
- 
+
   Location _locationService = new Location();
   LocationData _currentLocation;
   StreamSubscription<LocationData> _locationSubscription;
@@ -39,11 +46,37 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
     super.initState();
     initMarkerList();
     loadMarkers();
-    initPlatformState();
+    // initPlatformState();
+    initLocationView();
+  }
+
+  void initLocationView() async {
+    //initialise start location + ATM/CP view
+    if (widget.ifCPATM == true) { //View Carpark
+      //user entered from side menu / event details
+      _mapViewIndex = 3;
+      _pressAttentionCP = true;
+      _pressAttentionATM = false;
+    } else { //View ATM
+      //user entered from event details
+      _mapViewIndex = 0;
+      _pressAttentionCP = false;
+      _pressAttentionATM = true;
+    }
+
+    if (widget.eventAddress == null) {
+      //User enter from side menu
+      initPlatformState();
+    } else if (widget.eventAddress != null) {
+      //user enter from event details
+      initPlatformState();
+      addUserMarker(widget.eventAddress);
+    }
   }
 
   void initPlatformState() async {
-    await _locationService.changeSettings(accuracy:LocationAccuracy.HIGH, interval: 1000);
+    await _locationService.changeSettings(
+        accuracy: LocationAccuracy.HIGH, interval: 1000);
     LocationData _location;
     try {
       bool serviceStatus = await _locationService.serviceEnabled();
@@ -51,7 +84,8 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
         bool _permission = await _locationService.hasPermission();
         if (_permission) {
           _location = await _locationService.getLocation();
-          _locationSubscription = _locationService.onLocationChanged().listen((LocationData res) {
+          _locationSubscription =
+              _locationService.onLocationChanged().listen((LocationData res) {
             if (mounted) {
               print(res.toString());
               setState(() {
@@ -63,7 +97,8 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
             _currentLocation = _location;
           });
         } else {
-          bool permissionStatusResult = await _locationService.requestPermission();
+          bool permissionStatusResult =
+              await _locationService.requestPermission();
           if (permissionStatusResult) {
             initPlatformState();
           }
@@ -332,28 +367,29 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
                     ),
                   ]),
             ),
-            _currentLocation != null ? Expanded(
-              child: GoogleMap(
-                  myLocationEnabled: true,
-                  mapType: MapType.normal,
-                  initialCameraPosition: CameraPosition(
-                    target:
-                        LatLng(_currentLocation.latitude, _currentLocation.longitude),
-                    zoom: 15,
-                  ),
-                  onMapCreated: (GoogleMapController controller) {
-                    _controller.complete(controller);
-                  },
-                  markers: Set<Marker>.of(
-                      markersSet.elementAt(_mapViewIndex).values)),
-            ) : new Expanded(
-              child: new Center(
-                child: SpinKitRipple(
-                  color: Colors.teal,
-                  size: 50.0,
-                )
-              ),
-            )
+            _currentLocation != null
+                ? Expanded(
+                    child: GoogleMap(
+                        myLocationEnabled: true,
+                        mapType: MapType.normal,
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(_currentLocation.latitude,
+                              _currentLocation.longitude),
+                          zoom: 15,
+                        ),
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                        },
+                        markers: Set<Marker>.of(
+                            markersSet.elementAt(_mapViewIndex).values)),
+                  )
+                : new Expanded(
+                    child: new Center(
+                        child: SpinKitRipple(
+                      color: Colors.teal,
+                      size: 50.0,
+                    )),
+                  )
           ],
         ),
       ),
