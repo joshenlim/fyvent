@@ -5,7 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:fyvent/models/event.dart';
 import 'package:fyvent/app_state_container.dart';
-import 'package:fyvent/utils/api_facade.dart';
+import 'package:fyvent/utils/event_manager.dart';
 import 'package:fyvent/screens/search_nearby_screen.dart';
 class EventDetailScreen extends StatefulWidget {
   final Event event;

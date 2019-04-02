@@ -1,3 +1,5 @@
+import "package:fyvent/models/event.dart";
+
 String parseTime(int hour, String minute) {
   String unit = "AM";
   if (hour > 12) {
@@ -81,4 +83,20 @@ String parseDatetimeRange(String start, String end) {
     String parsedEndTime = parseTime(endHour, endMinute);
     return "$constructDateRange • $parsedStartTime - $parsedEndTime";
   }  
+}
+
+bool checkIfEventInFavourites(List favourites, int id) {
+  bool found = false;
+  favourites.forEach((item) {
+    if (item['id'] == id) found = true;
+  });
+  return found;
+}
+
+bool checkIfEventInUserFavourites(List<Event> favourites, int id) {
+  bool found = false;
+  favourites.forEach((item) {
+    if (item.getId() == id) found = true;
+  });
+  return found;
 }

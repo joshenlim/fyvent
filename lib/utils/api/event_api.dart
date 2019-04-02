@@ -120,19 +120,3 @@ Future<List> getCategories() async {
   return categoriesFromJson(response.body);
   
 }
-
-bool checkIfEventInFavourites(List favourites, int id) {
-  bool found = false;
-  favourites.forEach((item) {
-    if (item['id'] == id) found = true;
-  });
-  return found;
-}
-
-bool checkIfEventInUserFavourites(List<Event> favourites, int id) {
-  bool found = false;
-  favourites.forEach((item) {
-    if (item.getId() == id) found = true;
-  });
-  return found;
-}
