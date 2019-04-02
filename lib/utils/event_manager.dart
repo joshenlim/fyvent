@@ -9,7 +9,7 @@ String parseTime(int hour, String minute) {
   return "$hour:$minute $unit";
 }
 
-String parseDateTime(String datetime) {
+String parseDatetime(String datetime) {
   String date = datetime.split(" ")[0];
   String time = datetime.split(" ")[1];
   
@@ -87,16 +87,22 @@ String parseDatetimeRange(String start, String end) {
 
 bool checkIfEventInFavourites(List favourites, int id) {
   bool found = false;
-  favourites.forEach((item) {
-    if (item['id'] == id) found = true;
-  });
+  for (var item in favourites) {
+      if (item['id'] == id) {
+          found = true;
+          break;
+      }
+  }
   return found;
 }
 
 bool checkIfEventInUserFavourites(List<Event> favourites, int id) {
   bool found = false;
-  favourites.forEach((item) {
-    if (item.getId() == id) found = true;
-  });
+  for (var item in favourites) {
+      if (item.getId() == id) {
+          found = true;
+          break;
+      }
+  }
   return found;
 }

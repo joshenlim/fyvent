@@ -18,16 +18,16 @@ class User {
     }).toList();
   }
 
+  String getId() {
+      return this._id;
+  }
+
   String getName() {
     return this._name;
   }
 
   String getEmail() {
     return this._email;
-  }
-
-  String getId() {
-    return this._id;
   }
 
   String getPhotoUrl() {
