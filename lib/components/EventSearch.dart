@@ -8,35 +8,17 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 class EventSearch extends SearchDelegate<String> {
   final List categories;
   EventSearch({this.categories});
-  String selectedCategory = "All Events";
-  int categoryId = 246;
-  Map selectedPricing;
 
-  List pricing = [
-    {"id": 1, "name": "< \$10", "type": "price", "price_min": 0, "price_max": 10},
-    {"id": 2, "name": "\$10 ~ \$60", "type": "price", "price_min": 10, "price_max": 60},
-    {"id": 3, "name": "> \$60", "type": "price", "price_min": 60, "price_max": 10}
-  ];
+  Map selectedCategory = {"id": 246, "name": "All Events", "type": "category"};
 
   void _updateQuery(Map activeValue) {
-    print("selectedPricing initial value: $selectedPricing");
-    print("selectedCategory initial value: $selectedCategory");
-    print(activeValue.toString());
     if (activeValue.isNotEmpty) {
-      if (activeValue["type"] == "price") {
-        selectedPricing = activeValue;
-        print("selectedPricing new value: $selectedPricing");
-      } else if (activeValue["type"] == "category"){
-        selectedCategory = activeValue["name"];
-        categoryId = activeValue["id"];
-        print("selectedCategory new value: $selectedCategory");
-      }
+      if (activeValue["type"] == "category") selectedCategory = activeValue;
     }
   }
 
   @override
   List<Widget> buildActions(BuildContext context) {
-    //Widget to display the search query in the appBar
     TextStyle optionTextStyle =
         new TextStyle(fontSize: 16.0, color: Colors.black);
     void _showFilterOptions() {
@@ -59,13 +41,6 @@ class EventSearch extends SearchDelegate<String> {
                       style: optionTextStyle,
                     ),
                     trailing: DropdownOption(categories, categories[0], _updateQuery)),
-                new ListTile(
-                    leading: new Icon(Icons.attach_money),
-                    title: new Text(
-                      'Pricing',
-                      style: optionTextStyle,
-                    ),
-                    trailing: DropdownOption(pricing, pricing[0], _updateQuery)),
                 new Padding(padding: const EdgeInsets.only(bottom: 10.0))
               ],
             );
@@ -130,8 +105,7 @@ class EventSearch extends SearchDelegate<String> {
               ]));
     }
     return FutureBuilder<List<Event>>(
-        future: searchEventsByCategory(categoryId, query),
-        // searchEvents(query),
+        future: searchEventsByCategory(selectedCategory["id"], query),
         builder: (BuildContext context, AsyncSnapshot<List<Event>> events) {
           if (events.connectionState == ConnectionState.waiting) {
             return Container(
