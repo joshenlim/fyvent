@@ -39,40 +39,40 @@ class Event {
     return this.name;
   }
 
+  String getDescription() {
+      return this.description;
+  }
+
+  String getAddress() {
+      return this.address;
+  }
+
+  String getLocationDesc() {
+      return this.locationDesc;
+  }
+
+  String getDatetimeStart() {
+      return this.datetimeStart;
+  }
+
+  String getDatetimeEnd() {
+      return this.datetimeEnd;
+  }
+
+  String getDatetimeRange() {
+      return this.datetimeRange;
+  }
+
+  String getCategory() {
+      return this.category;
+  }
+
   String getImgUrl() {
     return this.imgUrl;
   }
 
   String getWebUrl() {
     return this.webUrl;
-  }
-
-  String getCategory() {
-    return this.category;
-  }
-
-  String getDescription() {
-    return this.description;
-  }
-
-  String getAddress() {
-    return this.address;
-  }
-
-  String getLocationDesc() {
-    return this.locationDesc;
-  }
-
-  String getDatetimeStart() {
-    return this.datetimeStart;
-  }
-
-  String getDatetimeEnd() {
-    return this.datetimeEnd;
-  }
-
-  String getDatetimeRange() {
-    return this.datetimeRange;
   }
 
   double getLat() {
@@ -130,8 +130,8 @@ class Event {
       description   : parsedJson['description'],
       address       : parsedJson['address'],
       locationDesc  : parsedJson['location_summary'],
-      datetimeStart : parseDateTime(parsedJson['datetime_start']),
-      datetimeEnd   : parseDateTime(parsedJson['datetime_end']),
+      datetimeStart : parseDatetime(parsedJson['datetime_start']),
+      datetimeEnd   : parseDatetime(parsedJson['datetime_end']),
       datetimeRange : parseDatetimeRange(parsedJson['datetime_start'], parsedJson['datetime_end']),
       category      : parsedJson['category']['name'],
       imgUrl        : 'http://' + parsedImgUrl,
