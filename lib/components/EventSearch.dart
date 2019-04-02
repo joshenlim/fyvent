@@ -58,14 +58,14 @@ class EventSearch extends SearchDelegate<String> {
                       'Category',
                       style: optionTextStyle,
                     ),
-                    trailing: DropdownOption(categories, _updateQuery)),
+                    trailing: DropdownOption(categories, categories[0], _updateQuery)),
                 new ListTile(
                     leading: new Icon(Icons.attach_money),
                     title: new Text(
                       'Pricing',
                       style: optionTextStyle,
                     ),
-                    trailing: DropdownOption(pricing, _updateQuery)),
+                    trailing: DropdownOption(pricing, pricing[0], _updateQuery)),
                 new Padding(padding: const EdgeInsets.only(bottom: 10.0))
               ],
             );

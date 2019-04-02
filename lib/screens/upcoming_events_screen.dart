@@ -22,6 +22,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
       new TextStyle(fontSize: 16.0, color: Colors.black);
   List<Event> _eventList = List<Event>();
   List _categoriesList = List();
+  Map _activeCategory = {};
 
   void _showFilterOptions() {
     showModalBottomSheet<void>(
@@ -42,7 +43,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
                     'Category',
                     style: optionTextStyle,
                   ),
-                  trailing: DropdownOption(_categoriesList, updateSelected)),
+                  trailing: DropdownOption(_categoriesList, _activeCategory, updateSelected)),
               new Padding(padding: const EdgeInsets.only(bottom: 10.0))
             ],
           );
@@ -52,6 +53,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
   void updateSelected(Map option) {
     setState(() {
       _eventList = new List();
+      _activeCategory = option;
     });
     getEventWCat(20, option['id']).then((res) {
       setState(() {
@@ -71,6 +73,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
     getCategories().then((res) {
       setState(() {
         _categoriesList = res;
+        _activeCategory = res[0];
       });
     });
   }

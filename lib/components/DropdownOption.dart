@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class DropdownOption extends StatefulWidget {
   final List options;
+  final Map activeOption;
   final Function updateQuery;
-  DropdownOption(this.options, this.updateQuery);
+  DropdownOption(this.options, this.activeOption, this.updateQuery);
 
   @override
   State<StatefulWidget> createState() => DropdownOptionState();
@@ -18,7 +19,7 @@ class DropdownOptionState extends State<DropdownOption> {
   void initState() {
     super.initState();
     options = widget.options;
-    activeOption = widget.options[0];
+    activeOption = widget.activeOption;
   }
 
   @override
