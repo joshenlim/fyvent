@@ -38,6 +38,7 @@ List categoriesFromJson(String str) {
           categoryList.add({
                                "id"  : category["id"],
                                "name": category["name"],
+                               "type": "category",
                            });
       });
   }
@@ -57,13 +58,51 @@ Future<List<Event>> getEvents(int qty) async {
   return eventsFromJson(response.body);
 }
 
+Future<List<Event>> getEventWCat(int qty, int catId) async {
+  final response = await http.get('$_apiUrl/events.json?rows=$qty&category=$catId',
+    headers: {
+      'authorization' : basicAuth
+    }
+  );
+  return eventsFromJson(response.body);
+}
+
 Future<List<Event>> searchEventsByCategory(int catId, String query) async {
-  final response = await http.get('$_apiUrl/events.json?q=$query&category=$catId',
+  print("catId = $catId, query = $query");
+  if (catId == null){
+    final response = await http.get('$_apiUrl/events.json?q=$query',
     headers: {
       'authorization' : basicAuth
     });
-  return eventsFromJson(response.body);
+    print("catId is null");
+    return eventsFromJson(response.body);
+  }
+  else if (catId !=null && query == ""){ //search by category only
+    final response = await http.get('$_apiUrl/events.json?category=$catId',
+    headers: {
+      'authorization' : basicAuth
+    });
+    print("catId is not null , query == ''");
+    return eventsFromJson(response.body);
+  }
+  else if (catId != null && query != ""){
+    final response = await http.get('$_apiUrl/events.json?q=$query&category=$catId',
+    headers: {
+      'authorization' : basicAuth
+    });
+    print("catId is not null and query is not ''");
+    return eventsFromJson(response.body);
+  }
+  
 }
+
+// Future<List<Event>> searchEventsByCategoryPrice(int catId, String query) async {
+//   final response = await http.get('$_apiUrl/events.json?q=$query&category=$catId',
+//     headers: {
+//       'authorization' : basicAuth
+//     });
+//   return eventsFromJson(response.body);
+// }
 
 Future<List<Event>> searchEvents(String query) async {
     final response = await http.get('$_apiUrl/events.json?q=$query',

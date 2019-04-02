@@ -14,6 +14,10 @@ Future<List> getCarparkLocations() async =>
 Future<List<Event>> getEvents(int qty) async =>
     eventAPI.getEvents(qty);
 
+    
+Future<List<Event>> getEventWCat(int _qty, int _catId) async =>
+    eventAPI.getEventWCat(_qty, _catId);
+
 Future<List<Event>> searchEvents(String query) async =>
     eventAPI.searchEvents(query);
 
