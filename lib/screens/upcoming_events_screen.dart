@@ -43,7 +43,8 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
                     'Category',
                     style: optionTextStyle,
                   ),
-                  trailing: DropdownOption(_categoriesList, _activeCategory, updateSelected)),
+                  trailing: DropdownOption(
+                      _categoriesList, _activeCategory, updateSelected)),
               new Padding(padding: const EdgeInsets.only(bottom: 10.0))
             ],
           );
@@ -119,50 +120,61 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
         width: width,
         child: new RefreshIndicator(
             onRefresh: refreshList,
-            child: _eventList.length != 0
-                ? new ListView.builder(
-                    itemCount: _eventList.length + 2,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return FeaturedEventCard(
-                          imgUrl: firebaseStorageUrl +
-                              "featured.jpg?alt=media&token=e68a1975-50ca-42c3-b38a-6ac587b8fbd0",
-                          title: "Tis The Sea-sun",
-                          description: "Beach Getaway Expo",
-                          datetime: "10 March 2019 • 10:00 AM",
-                          address: "Suntec City - Event Hall 3",
-                        );
-                      } else if (index == 1) {
-                        return new Container(
-                          margin: const EdgeInsets.only(
-                              top: 20.0, left: 20.0, right: 20.0),
-                          child: new Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                new Text(
-                                  "Upcoming Events:",
-                                  style: new TextStyle(
-                                      fontFamily: 'Greycliff', fontSize: 18.0),
-                                ),
-                                new IconButton(
-                                    icon: Icon(Icons.filter_list),
-                                    onPressed: () {
-                                      _showFilterOptions();
-                                    }),
-                              ]),
-                        );
-                      } else {
-                        return EventCard(event: _eventList[index - 2]);
-                      }
-                    },
-                  )
-                : new Center(
-                    child: SpinKitRipple(
-                      color: Colors.teal,
-                      size: 50.0,
-                    ),
-                  )));
+            child: new ListView.builder(
+              itemCount: _eventList.length != 0
+                  ? _eventList.length + 2
+                  : _eventList.length + 3,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return FeaturedEventCard(
+                    imgUrl: firebaseStorageUrl +
+                        "featured.jpg?alt=media&token=e68a1975-50ca-42c3-b38a-6ac587b8fbd0",
+                    title: "Tis The Sea-sun",
+                    description: "Beach Getaway Expo",
+                    datetime: "10 March 2019 • 10:00 AM",
+                    address: "Suntec City - Event Hall 3",
+                  );
+                } else if (index == 1) {
+                  return new Container(
+                    margin: const EdgeInsets.only(
+                        top: 20.0, left: 20.0, right: 20.0),
+                    child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          new Text(
+                            "Upcoming Events:",
+                            style: new TextStyle(
+                                fontFamily: 'Greycliff', fontSize: 18.0),
+                          ),
+                          new IconButton(
+                              icon: Icon(Icons.filter_list),
+                              onPressed: () {
+                                _showFilterOptions();
+                              }),
+                        ]),
+                  );
+                } else {
+                  return _eventList.length != 0
+                      ? EventCard(event: _eventList[index - 2])
+                      : new Container(
+                        height: 350,
+                        child: Center(
+                          child: SpinKitRipple(
+                            color: Colors.teal,
+                            size: 50.0,
+                          ),
+                        )
+                      );
+                }
+              },
+            )));
+    // : new Center(
+    //     child: SpinKitRipple(
+    //       color: Colors.teal,
+    //       size: 50.0,
+    //     ),
+    //   )));
 
     return new Scaffold(
       drawer: SideMenu(
