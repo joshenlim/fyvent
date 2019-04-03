@@ -54,13 +54,16 @@ class SideMenu extends StatelessWidget {
                     )
                   ),
                 ),
-                new Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(name, style: new TextStyle(fontFamily: 'Greycliff', fontSize: 18.0)),
-                    Text(email, style: new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, fontSize: 14.0))
-                  ]
+                new Container(
+                  width: 170.0,
+                  child: new Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(name, style: new TextStyle(fontFamily: 'Greycliff', fontSize: 18.0)),
+                      Text(email, style: new TextStyle(fontFamily: 'Roboto', fontWeight: FontWeight.w300, fontSize: 14.0))
+                    ]
+                  )
                 )
               ]
             )

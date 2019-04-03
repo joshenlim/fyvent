@@ -20,7 +20,7 @@ class EventCard extends StatelessWidget {
       fontSize: 14.0
     );
 
-    final boxShadowOverlayHeight = title.length > 27 ? 105.0 : 80.0;
+    final boxShadowOverlayHeight = title.length > 27 ? 110.0 : 80.0;
 
     if (title.length > 47) title = title.substring(0, 47) + "...";
 
