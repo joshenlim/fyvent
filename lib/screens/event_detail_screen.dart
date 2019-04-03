@@ -130,16 +130,23 @@ class EventDetailScreenState extends State<EventDetailScreen> {
                 children: event.getTicketPrices().map((ticket) {
                   return new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      new Text(
-                        ticket['name'],
-                        style: _cardDescStyle,
+                      new Container(
+                        width: 220.0,
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: new Text(
+                          ticket['name'],
+                          style: _cardDescStyle,
+                        ),
                       ),
-                      new Text(
-                        'SGD \$' + ticket['price'],
-                        style: _cardDescStyle,
-                      ),
+                      new Container(
+                        padding: const EdgeInsets.only(bottom: 5.0),
+                        child: new Text(
+                          'SGD \$' + ticket['price'],
+                          style: _cardDescStyle,
+                        ),
+                      )
                     ]
                   );
                 }).toList(),
