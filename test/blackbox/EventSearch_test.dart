@@ -14,136 +14,400 @@ import 'package:flutter_test/flutter_test.dart';
 /// main() runs the tests
 void main()
 {
-    testWidgets('Fyvent must allow the user to filter the events by his/her preferences.',
+    // Fyvent must allow the user to filter the events by his/her preferences.
+
+    testWidgets('test case: display IconButton (with search icon)', (WidgetTester tester) async {
+
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },]);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch,)
+            ));
+
+        expect(find.widgetWithIcon(IconButton, Icons.search), findsOneWidget);
+        expect(find.widgetWithIcon(IconButton, Icons.error), findsNothing);
+    });
+
+    // Fyvent must allow the user to filter events by keywords
+    // formed by entering text characters into a textfield
+
+    testWidgets('test case: display Textfield', (WidgetTester tester) async {
+
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },]);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch,)
+            ));
+
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        // test case: display Textfield
+        expect(find.byType(TextField), findsOneWidget);
+        expect(find.byType(RaisedButton), findsNothing);
+    });
+
+    testWidgets('test case: text entered into Textfield is stored as a SearchDelegate query',
                         (WidgetTester tester) async {
 
-                        // entry to ‘event search screen’
-                        await tester.pumpWidget(new MaterialApp(
-                            home: TestEventSearchScreen()
-                            ));
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },]);
 
-                        // test case: display IconButton (with search icon)
-                        expect(find.widgetWithIcon(IconButton, Icons.search), findsOneWidget);
-                        expect(find.widgetWithIcon(IconButton, Icons.error), findsNothing);
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
 
-                        // tap IconButton (with search icon)
-                        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
-                        await tester.pumpAndSettle();
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
 
-                        // test case: display IconButton (with filter list icon)
-                        expect(find.widgetWithIcon(IconButton, Icons.filter_list), findsOneWidget);
-                        expect(find.widgetWithIcon(IconButton, Icons.view_list), findsNothing);
+        // entering text (e.g. test) into TextField
+        await tester.enterText(find.byType(TextField), 'test');
+        await tester.pump();
 
-                        // test case: display DropDownOption
-                        expect(find.byType(DropdownOption), findsOneWidget);
-                        expect(find.byType(SideMenu), findsNothing);
+        expect(testEventSearch.query == 'test', isTrue);
+        expect(testEventSearch.query == '', isFalse);
+        expect(testEventSearch.query == 'bug in textfield', isFalse);
+    });
 
-                        // test case: display “Filter events by:”
-                        expect(find.text('Filter events by:'), findsOneWidget);
-                        expect(find.text('Favourite events'), findsNothing);
+    // Fyvent must allow the user to filter events by the mutually exclusive event categories...
 
-                        // test case: display DropDownButton
-                        expect(find.byType(DropdownButton), findsOneWidget);
-                        expect(find.byType(SimpleDialog), findsNothing);
+    testWidgets('test case: display IconButton (with filter list icon)',
+    (WidgetTester tester) async {
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },
+            ]);
 
-                        // test case: display “Category”
-                        expect(find.text('Category'), findsOneWidget);
-                        expect(find.text('Age'), findsNothing);
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
 
-                        // tap on DowndownButton
-                        await tester.tap(find.byType(DropdownButton));
-                        await tester.pump();
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
 
-                        // test case: display the right number of DropdownMenuItem
-                        expect(find.byType(DropdownMenuItem), findsNWidgets(20));
+        expect(find.widgetWithIcon(IconButton, Icons.filter_list), findsOneWidget);
+        expect(find.widgetWithIcon(IconButton, Icons.view_list), findsNothing);
+    });
 
-                        // invalid equivalence class; will fail when uncommented
-//                        expect(find.byType(DropdownMenuItem), findsNWidgets(19));
-                        // invalid equivalence class; will fail when uncommented
-//                        expect(find.byType(DropdownMenuItem), findsNWidgets(21));
+    testWidgets('test case: display DropDownOption', (WidgetTester tester) async {
 
-                        // test case: display all event categories
-                        expect(find.text('All Events'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Concerts & Gig Guide'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Performing Arts'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Theater'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Sports'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Festivals & Lifestyle'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Ballet'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Exhibitions'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Business & Education'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Musicals'),
-                                   findsNWidgets(2));
-                        expect(find.widgetWithText(DropdownMenuItem,'Comics Convention'),
-                                   findsNothing);
-                    });
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },]);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
+
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(DropdownOption), findsOneWidget);
+        expect(find.byType(SideMenu), findsNothing);
+    });
+
+    testWidgets('test case: display "Filter events by:"', (WidgetTester tester) async {
+
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },]);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
+
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Filter events by:'), findsOneWidget);
+        expect(find.text('Favourite events'), findsNothing);
+    });
+
+    testWidgets('test case: display DropDownButton', (WidgetTester tester) async {
+
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },]);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
+
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(DropdownButton), findsOneWidget);
+        expect(find.byType(SimpleDialog), findsNothing);
+    });
+
+    testWidgets('test case: display DropDownButton', (WidgetTester tester) async {
+
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },]);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
+
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(DropdownButton), findsOneWidget);
+        expect(find.byType(SimpleDialog), findsNothing);
+    });
+
+    testWidgets('test case: display "Category"', (WidgetTester tester) async {
+
+        TestEventSearch testEventSearch = new TestEventSearch(
+            categories: [{
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },]);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
+
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Category'), findsOneWidget);
+        expect(find.text('Age'), findsNothing);
+    });
+
+    // Fyvent must allow the user to filter events by
+    // the mutually exclusive event categories listed below:'
+    // All Events
+    // Concerts & Gig Guide
+    // Performing Arts
+    // Theater
+    // Sports
+    // Festivals & Lifestyle
+    // Ballet
+    // Exhibitions
+    // Business & Education
+    // Musicals
+
+    testWidgets('test case: display the right number of DropdownMenuItem',
+                        (WidgetTester tester) async {
+
+        // categories for testing
+        final List categories = [
+            {
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },
+            {
+                'id': '1',
+                'name': 'Concerts & Gig Guide',
+                'type': "category",
+            },
+            {
+                'id': '2',
+                'name': 'Performing Arts',
+                'type': "category",
+            },
+            {
+                'id': '3',
+                'name': 'Theater',
+                'type': "category",
+            },
+            {
+                'id': '4',
+                'name': 'Sports',
+                'type': "category",
+            },
+            {
+                'id': '5',
+                'name': 'Festivals & Lifestyle',
+                'type': "category",
+            },
+            {
+                'id': '6',
+                'name': 'Ballet',
+                'type': "category",
+            },
+            {
+                'id': '7',
+                'name': 'Exhibitions',
+                'type': "category",
+            },
+            {
+                'id': '8',
+                'name': 'Business & Education',
+                'type': "category",
+            },
+            {
+                'id': '9',
+                'name': 'Musicals',
+                'type': "category",
+            },
+        ];
+
+        TestEventSearch testEventSearch = new TestEventSearch(categories: categories);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
+
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        // tap on DowndownButton
+        await tester.tap(find.byType(DropdownButton));
+        await tester.pump();
+
+        expect(find.byType(DropdownMenuItem), findsNWidgets(20));
+
+        // invalid equivalence class; will fail when uncommented
+//        expect(find.byType(DropdownMenuItem), findsNWidgets(19));
+        // invalid equivalence class; will fail when uncommented
+//        expect(find.byType(DropdownMenuItem), findsNWidgets(21));
+
+    });
+
+    testWidgets('test case: display all event categories', (WidgetTester tester) async {
+
+        // categories for testing
+        final List categories = [
+            {
+                'id': '0',
+                'name': 'All Events',
+                'type': "category",
+            },
+            {
+                'id': '1',
+                'name': 'Concerts & Gig Guide',
+                'type': "category",
+            },
+            {
+                'id': '2',
+                'name': 'Performing Arts',
+                'type': "category",
+            },
+            {
+                'id': '3',
+                'name': 'Theater',
+                'type': "category",
+            },
+            {
+                'id': '4',
+                'name': 'Sports',
+                'type': "category",
+            },
+            {
+                'id': '5',
+                'name': 'Festivals & Lifestyle',
+                'type': "category",
+            },
+            {
+                'id': '6',
+                'name': 'Ballet',
+                'type': "category",
+            },
+            {
+                'id': '7',
+                'name': 'Exhibitions',
+                'type': "category",
+            },
+            {
+                'id': '8',
+                'name': 'Business & Education',
+                'type': "category",
+            },
+            {
+                'id': '9',
+                'name': 'Musicals',
+                'type': "category",
+            },
+        ];
+
+        TestEventSearch testEventSearch = new TestEventSearch(categories: categories);
+
+        // entry to ‘event search screen’
+        await tester.pumpWidget(new MaterialApp(
+            home: TestEventSearchScreen(testEventSearch: testEventSearch)
+            ));
+
+        // tap IconButton (with search icon)
+        await tester.tap(find.widgetWithIcon(IconButton, Icons.search));
+        await tester.pumpAndSettle();
+
+        // tap on DowndownButton
+        await tester.tap(find.byType(DropdownButton));
+        await tester.pump();
+
+        expect(find.widgetWithText(DropdownMenuItem,'All Events'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Concerts & Gig Guide'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Performing Arts'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Theater'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Sports'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Festivals & Lifestyle'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Ballet'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Exhibitions'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Business & Education'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Musicals'), findsNWidgets(2));
+        expect(find.widgetWithText(DropdownMenuItem,'Comics Convention'), findsNothing);
+    });
 }
 
 /// display screen for TestEventSearch
 class TestEventSearchScreen extends StatelessWidget {
 
-    // categories for testing
-    final List _categoriesList = [
-        {
-            'id': '0',
-            'name': 'All Events',
-            'type': "category",
-        },
-        {
-            'id': '1',
-            'name': 'Concerts & Gig Guide',
-            'type': "category",
-        },
-        {
-            'id': '2',
-            'name': 'Performing Arts',
-            'type': "category",
-        },
-        {
-            'id': '3',
-            'name': 'Theater',
-            'type': "category",
-        },
-        {
-            'id': '4',
-            'name': 'Sports',
-            'type': "category",
-        },
-        {
-            'id': '5',
-            'name': 'Festivals & Lifestyle',
-            'type': "category",
-        },
-        {
-            'id': '6',
-            'name': 'Ballet',
-            'type': "category",
-        },
-        {
-            'id': '7',
-            'name': 'Exhibitions',
-            'type': "category",
-        },
-        {
-            'id': '8',
-            'name': 'Business & Education',
-            'type': "category",
-        },
-        {
-            'id': '9',
-            'name': 'Musicals',
-            'type': "category",
-        },
-    ];
+    final TestEventSearch testEventSearch;
+
+    TestEventSearchScreen({this.testEventSearch});
 
     void updateSelected(Map option) {
 
@@ -159,7 +423,7 @@ class TestEventSearchScreen extends StatelessWidget {
                     onPressed: () {
                         showSearch(
                             context: context,
-                            delegate: TestEventSearch(categories: _categoriesList)
+                            delegate: testEventSearch
                             );
                     },
                     ),
