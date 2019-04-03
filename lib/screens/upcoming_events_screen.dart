@@ -131,7 +131,7 @@ class UpcomingEventsScreenState extends State<UpcomingEventsScreen> {
                         "featured.jpg?alt=media&token=e68a1975-50ca-42c3-b38a-6ac587b8fbd0",
                     title: "Tis The Sea-sun",
                     description: "Beach Getaway Expo",
-                    datetime: "10 March 2019 • 10:00 AM",
+                    datetime: "15 April 2019 • 10:00 AM",
                     address: "Suntec City - Event Hall 3",
                   );
                 } else if (index == 1) {

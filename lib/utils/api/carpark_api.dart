@@ -19,7 +19,6 @@ Future<List> getCarparkLocations() async {
       if (carpark["LotType"] == "C" || carpark["LotType"] == "M") {
         if (carpark["Location"].length > 0) {
           List<String> latLng = carpark["Location"].split(" ");
-          // print(latLng.toString() + " : " + latLng.length.toString());
           String carparkAddress = carpark["Area"].length > 0
               ? carpark["Development"] + " (" + carpark["Area"] + ")"
               : carpark["Development"];

@@ -14,6 +14,7 @@ class Event {
   String webUrl;
   double lat;
   double lng;
+  List ticketPrices;
 
   Event({
     this.id,
@@ -29,6 +30,7 @@ class Event {
     this.webUrl,
     this.lat,
     this.lng,
+    this.ticketPrices,
   });
 
   int getId() {
@@ -82,6 +84,10 @@ class Event {
   double getLng() {
     return this.lng;
   }
+
+  List getTicketPrices() {
+    return this.ticketPrices;
+  }
   
   Map toObject() {
     return {
@@ -98,6 +104,7 @@ class Event {
       'webUrl'        : this.webUrl,
       'lat'           : this.lat,
       'lng'           : this.lng,
+      'ticketPrices'  : this.ticketPrices,
     };
   }
 
@@ -116,6 +123,7 @@ class Event {
       webUrl        : eventObject['webUrl'],
       lat           : eventObject['lat'],
       lng           : eventObject['lng'],
+      ticketPrices  : eventObject['ticketPrices'], 
     );
   }
 
@@ -138,6 +146,7 @@ class Event {
       webUrl        : parsedWebUrl,
       lat           : parsedJson['point']['lat'],
       lng           : parsedJson['point']['lng'],
+      ticketPrices  : parsedJson['ticket_types']['ticket_types'], 
     );
   }
 }

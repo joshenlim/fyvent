@@ -114,6 +114,39 @@ class EventDetailScreenState extends State<EventDetailScreen> {
     );
   }
 
+  Widget _eventPricing(double width) {
+    return new Container(
+        padding: _cardPadding,
+        margin: _cardMargin,
+        width: width,
+        decoration: _cardDecoration,
+        child: new Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              new Text("Ticket Pricing", style: _cardHeaderStyle),
+              new Padding(padding: const EdgeInsets.only(top: 10.0)),
+              new Column(
+                children: event.getTicketPrices().map((ticket) {
+                  return new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      new Text(
+                        ticket['name'],
+                        style: _cardDescStyle,
+                      ),
+                      new Text(
+                        'SGD \$' + ticket['price'],
+                        style: _cardDescStyle,
+                      ),
+                    ]
+                  );
+                }).toList(),
+              )
+            ]));
+  }
+
   Widget _eventLocationCard(double width) {
     final MarkerId markerId = MarkerId("marker_1");
     final Map<MarkerId, Marker> markers = <MarkerId, Marker>{
@@ -369,6 +402,7 @@ class EventDetailScreenState extends State<EventDetailScreen> {
     var width = MediaQuery.of(context).size.width;
     final bool eventHasLatLng =
         (event.getLat() != null) && (event.getLng() != null);
+    final bool eventHasTicket = event.getTicketPrices().length > 0;
 
     Widget _appBar = new AppBar(
       title: new Text("Event Details"),
@@ -385,6 +419,9 @@ class EventDetailScreenState extends State<EventDetailScreen> {
         child: new ListView(shrinkWrap: true, children: [
           _eventHeroImage(width),
           _eventDetailsCard(width),
+          eventHasTicket
+              ? _eventPricing(width)
+              : new Padding(padding: const EdgeInsets.only(top: 0.0)),
           eventHasLatLng
               ? _eventLocationCard(width)
               : new Padding(padding: const EdgeInsets.only(top: 0.0)),

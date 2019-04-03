@@ -12,16 +12,12 @@ class SearchNearbyScreen extends StatefulWidget {
   final String eventAddress;
   final bool ifCPATM; // 1 for CP, 0 for ATM
   SearchNearbyScreen(this.eventAddress, this.ifCPATM);
-  // const SearchNearbyScreen({Key key, @required this.eventAddress, this.ifCPATM}) : super(key: key);
   @override
   SearchNearbyScreenState createState() => new SearchNearbyScreenState();
 }
 
 class SearchNearbyScreenState extends State<SearchNearbyScreen> {
   int _bottomNavBarIndex = 0;
-  // bool _pressAttentionCP = true;
-  // bool _pressAttentionATM = false;
-  // int _mapViewIndex = 3;
   bool _pressAttentionCP;
   bool _pressAttentionATM;
   int _mapViewIndex;
@@ -46,7 +42,6 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
     super.initState();
     initMarkerList();
     loadMarkers();
-    // initPlatformState();
     initLocationView();
   }
 
@@ -221,7 +216,6 @@ class SearchNearbyScreenState extends State<SearchNearbyScreen> {
   }
 
   Widget _appBar = new AppBar(
-    //create appbar
     title: new Text("Search Nearby"),
     backgroundColor: Colors.white,
     iconTheme: new IconThemeData(color: Colors.cyan),
