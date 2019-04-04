@@ -65,9 +65,9 @@ class LoginScreenState extends State<LoginScreen>
   Widget get _description {
     return new Container(
       margin: const EdgeInsets.only(bottom: 100.0),
-      width: 250,
+      width: 280,
       child: new Text(
-        "Be amazed by what's happening around the city.",
+        "Be amazed by your city, again.",
         textAlign: TextAlign.center,
         style: new TextStyle(
           color: Colors.white,
